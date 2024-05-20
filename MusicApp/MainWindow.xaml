@@ -10,7 +10,9 @@
             <Button Content="Go to Search" Width="120" Height="40"  Click="GoToSearch"/>
             <Button Content="Go to Chat" Width="120" Height="40" Click="GoToChat"/>
             <Button Content="Go to Profile" Width="120" Height="40" Click="GoToProfile"/>
-            
+            <Button Content="Go to Events" Width="120" Height="40" Click="GoToEvents"/>
+            <Button Content="Go to Playlist" Width="120" Height="40" Click="GoToPlaylist"/>
+
         </StackPanel>
     </Grid>
 </Window>

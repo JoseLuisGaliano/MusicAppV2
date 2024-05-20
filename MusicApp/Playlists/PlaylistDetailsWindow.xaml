@@ -1,0 +1,45 @@
+﻿<Window x:Class="MusicApp.Playlists.PlaylistDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Playlist Details" Height="500" Width="400" Background="#FF121212">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Set a row for the header including the Edit button -->
+            <RowDefinition Height="*"/>
+            <!-- Set a row for the content below, such as the list box -->
+        </Grid.RowDefinitions>
+
+        <!-- Header section with the Edit button -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
+            <Button Content="Edit Playlist" Click="EditPlaylistButton_Click" 
+                    Background="#FF1DB954" Foreground="White" 
+                    Padding="10,5" Margin="5"/>
+        </StackPanel>
+
+        <!-- List box to display songs in the playlist -->
+        <ListBox x:Name="SongsListBox" Background="#FF222222" Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="#FF333333" Padding="5" Margin="2" CornerRadius="3">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="{Binding TrackNumber}" Width="30" Foreground="White"/>
+                            <TextBlock Text="{Binding SongTitle}" Grid.Column="1" Margin="5,0" Foreground="White"/>
+                            <TextBlock Text="{Binding ArtistName}" Grid.Column="2" Margin="5,0" Foreground="White"/>
+
+                            <Button Content="Play" Grid.Column="3" Click="PlayButton_Click" 
+                                    Background="#1DB954" Foreground="White" BorderThickness="0"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

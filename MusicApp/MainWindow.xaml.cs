@@ -32,5 +32,19 @@ namespace MusicApp
             profileWindow.Show();
             Close();
         }
+
+        private void GoToEvents(object sender, RoutedEventArgs e)
+        {
+            Events.Event eventWindow = new Events.Event();
+            eventWindow.Show();
+            Close();
+        }
+
+        private void GoToPlaylist(object sender, RoutedEventArgs eventArgs)
+        {
+            Playlists.PlaylistListWindow playlistListWindow = new Playlists.PlaylistListWindow();
+            playlistListWindow.Show();
+            Close();
+        }
     }
 }

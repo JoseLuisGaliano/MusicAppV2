@@ -12,7 +12,7 @@ namespace MusicApp.Profile
         public ProfileWindow()
         {
             InitializeComponent();
-            
+
             // Create a new profile with an ID of 1
             userProfile = new Profile(1);
             // Set the biography textbox text
@@ -74,7 +74,7 @@ namespace MusicApp.Profile
 
         private void ChangeProfilePicture_Click(object sender, RoutedEventArgs e)
         {
-            //changing profile picture
+            // changing profile picture
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files (*.jpg; *.jpeg; *.png; *.bmp; *.gif)|*.jpg; *.jpeg; *.png; *.bmp; *.gif";
             if (openFileDialog.ShowDialog() == true)
@@ -86,6 +86,5 @@ namespace MusicApp.Profile
                 imgProfilePicture.Source = bitmap;
             }
         }
-
     }
 }
