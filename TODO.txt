@@ -1,6 +1,5 @@
 TODO
 
-> eliminate all static classes
 > better GUI + program window flow
 > make data types universal -> database manager reduced complexity
 > adjust database manager queries according to the final database model
