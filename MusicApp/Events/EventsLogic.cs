@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MusicApp.Database;
 using MusicApp.DataTypes;
 
 namespace MusicApp.Events
@@ -8,7 +9,7 @@ namespace MusicApp.Events
         public static void GetTicketTypesForEvent(string location, DateTime date, int eventId)
         {
             // Get ticket types for the selected event from the database
-            List<TicketType> ticketTypes = Database.DatabaseManager.GetTicketTypesForEvent(eventId);
+            List<TicketType> ticketTypes = DatabaseManager.GetInstance().GetTicketTypesForEvent(eventId);
 
             // Correct the constructor call by passing all required arguments.
             Buy buyWindow = new Buy(location, date, eventId, ticketTypes);

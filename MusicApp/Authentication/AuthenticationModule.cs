@@ -4,34 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using MusicApp.Database;
 
 namespace MusicApp.Authentication
 {
-    public static class AuthenticationModule
+    public class AuthenticationModule
     {
-        public static bool RegisterUser(string username, string password)
+        public AuthenticationModule()
+        {
+        }
+
+        public bool RegisterUser(string username, string password)
         {
             string salt = GenerateSalt();
             string hashedPassword = HashPassword(password, salt);
-            return Database.DatabaseManager.RegisterUser(username, hashedPassword, salt);
+            return DatabaseManager.GetInstance().RegisterUser(username, hashedPassword, salt);
         }
 
-        public static bool AuthenticateUser(string username, string password)
+        public bool AuthenticateUser(string username, string password)
         {
-            (string, string) credentials = Database.DatabaseManager.GetCredentials(username);
+            (string, string) credentials = DatabaseManager.GetInstance().GetCredentials(username);
             string hashedPassword = credentials.Item1;
             string salt = credentials.Item2;
             return hashedPassword == HashPassword(password, salt);
         }
 
-        private static string GenerateSalt()
+        private string GenerateSalt()
         {
             byte[] saltBytes = new byte[16];
             RandomNumberGenerator.Fill(saltBytes);
             return Convert.ToBase64String(saltBytes);
         }
 
-        private static string HashPassword(string password, string salt)
+        private string HashPassword(string password, string salt)
         {
             using (var sha256 = SHA256.Create())
             {

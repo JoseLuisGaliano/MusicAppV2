@@ -1,13 +1,18 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using MusicApp.Database;
 using MusicApp.DataTypes;
 
 namespace MusicApp.Playlists
 {
     public partial class PlaylistListWindow : Window
     {
+        private PlaylistLogic playlistLogic;
+
         public PlaylistListWindow()
         {
+            playlistLogic = new PlaylistLogic();
+
             InitializeComponent();
             LoadPlaylistsFromDatabase();
         }
@@ -15,7 +20,7 @@ namespace MusicApp.Playlists
         private void LoadPlaylistsFromDatabase()
         {
             // Load all playlists from the database
-            List<Playlist> playlists = Database.DatabaseManager.LoadAllPlaylists();
+            List<Playlist> playlists = DatabaseManager.GetInstance().LoadAllPlaylists();
 
             // Update GUI layout
             PlaylistResultsListBox.ItemsSource = playlists;
@@ -25,7 +30,7 @@ namespace MusicApp.Playlists
         {
             // Search the playlist in the database using an sql query
             string searchQuery = SearchBar.Text.ToLower().Trim();
-            List<Playlist> foundPlaylists = Database.DatabaseManager.SearchPlaylists(searchQuery);
+            List<Playlist> foundPlaylists = DatabaseManager.GetInstance().SearchPlaylists(searchQuery);
 
             // Update GUI layout
             PlaylistResultsListBox.ItemsSource = foundPlaylists;
@@ -42,7 +47,7 @@ namespace MusicApp.Playlists
         private void DeletePlaylistButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             var selectedPlaylistName = PlaylistResultsListBox.SelectedItem as string;
-            bool deleted = PlaylistLogic.DeletePlaylist(selectedPlaylistName);
+            bool deleted = playlistLogic.DeletePlaylist(selectedPlaylistName);
             if (deleted)
             {
                 LoadPlaylistsFromDatabase(); // Refresh playlist list
@@ -52,7 +57,7 @@ namespace MusicApp.Playlists
         private void DetailsButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             var button = sender as Button;
-            PlaylistLogic.ShowDetails(button);
+            playlistLogic.ShowDetails(button);
         }
     }
 }

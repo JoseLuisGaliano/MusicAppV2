@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using MusicApp.Database;
 using MusicApp.DataTypes;
 
 namespace MusicApp.Events
@@ -15,7 +16,7 @@ namespace MusicApp.Events
         private void LoadArtists()
         {
             // Load artists from the database into a list
-            List<ArtistModel> artists = Database.DatabaseManager.LoadArtists();
+            List<ArtistModel> artists = DatabaseManager.GetInstance().LoadArtists();
 
             // Update layout with fetched artists
             ArtistsComboBox.ItemsSource = artists;
@@ -32,7 +33,7 @@ namespace MusicApp.Events
         private void LoadEventsForSelectedArtist(int artistId)
         {
             // Load events for selected artist from the database
-            List<EventModel> events = Database.DatabaseManager.LoadArtistEvents(artistId);
+            List<EventModel> events = DatabaseManager.GetInstance().LoadArtistEvents(artistId);
 
             // Update layout with fetched events
             EventsListBox.ItemsSource = events;

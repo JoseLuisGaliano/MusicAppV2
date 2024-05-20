@@ -4,8 +4,11 @@ namespace MusicApp.Playlists
 {
     public partial class AddPlaylistWindow : Window
     {
+        private PlaylistLogic playlistLogic;
+
         public AddPlaylistWindow()
         {
+            playlistLogic = new PlaylistLogic();
             InitializeComponent();
         }
 
@@ -13,7 +16,7 @@ namespace MusicApp.Playlists
         {
             string playlistName = txtPlaylistName.Text;
             string playlistDescription = txtDescription.Text;
-            PlaylistLogic.AddPlaylist(playlistName, playlistDescription);
+            playlistLogic.AddPlaylist(playlistName, playlistDescription);
         }
     }
 }

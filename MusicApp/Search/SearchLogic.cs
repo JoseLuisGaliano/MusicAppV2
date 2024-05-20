@@ -4,12 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using MusicApp.Database;
 
 namespace MusicApp.Search
 {
-    public static class SearchLogic
+    public class SearchLogic
     {
-        public static List<SearchResultItemControl> GetSearchResults(int filter, string genre, string keywords, int sorter)
+        private Sorters sortingModule;
+        public SearchLogic()
+        {
+            sortingModule = new Sorters();
+        }
+
+        public List<SearchResultItemControl> GetSearchResults(int filter, string genre, string keywords, int sorter)
         {
             // Filter search
             List<SearchResultItemControl> searchItems = FilterSearch(filter, genre);
@@ -23,7 +30,7 @@ namespace MusicApp.Search
             return searchResults;
         }
 
-        private static List<SearchResultItemControl> FilterSearch(int filter, string genre)
+        private List<SearchResultItemControl> FilterSearch(int filter, string genre)
         {
             List<SearchResultItemControl> searchItems = new List<SearchResultItemControl>();
 
@@ -31,33 +38,33 @@ namespace MusicApp.Search
             switch (filter)
             {
                 case 0:
-                    searchItems = Database.DatabaseManager.LoadSongSearchItems(searchItems);
-                    searchItems = Database.DatabaseManager.LoadArtistSearchItems(searchItems);
-                    searchItems = Database.DatabaseManager.LoadAlbumSearchItems(searchItems);
-                    searchItems = Database.DatabaseManager.LoadUserSearchItems(searchItems);
+                    searchItems = DatabaseManager.GetInstance().LoadSongSearchItems(searchItems);
+                    searchItems = DatabaseManager.GetInstance().LoadArtistSearchItems(searchItems);
+                    searchItems = DatabaseManager.GetInstance().LoadAlbumSearchItems(searchItems);
+                    searchItems = DatabaseManager.GetInstance().LoadUserSearchItems(searchItems);
                     break;
                 case 1:
-                    searchItems = Database.DatabaseManager.LoadSongSearchItems(searchItems);
+                    searchItems = DatabaseManager.GetInstance().LoadSongSearchItems(searchItems);
                     break;
                 case 2:
-                    searchItems = Database.DatabaseManager.LoadArtistSearchItems(searchItems);
+                    searchItems = DatabaseManager.GetInstance().LoadArtistSearchItems(searchItems);
                     break;
                 case 3:
-                    searchItems = Database.DatabaseManager.LoadAlbumSearchItems(searchItems);
+                    searchItems = DatabaseManager.GetInstance().LoadAlbumSearchItems(searchItems);
                     break;
                 case 4:
-                    searchItems = Database.DatabaseManager.LoadSongSearchItems(searchItems, genre);
-                    searchItems = Database.DatabaseManager.LoadAlbumSearchItems(searchItems, genre);
+                    searchItems = DatabaseManager.GetInstance().LoadSongSearchItems(searchItems, genre);
+                    searchItems = DatabaseManager.GetInstance().LoadAlbumSearchItems(searchItems, genre);
                     break;
                 case 5:
-                    searchItems = Database.DatabaseManager.LoadUserSearchItems(searchItems);
+                    searchItems = DatabaseManager.GetInstance().LoadUserSearchItems(searchItems);
                     break;
             }
 
             return searchItems;
         }
 
-        private static List<SearchResultItemControl> FuzzyMatchingSearch(string keywords, List<SearchResultItemControl> searchItems)
+        private List<SearchResultItemControl> FuzzyMatchingSearch(string keywords, List<SearchResultItemControl> searchItems)
         {
             List<SearchResultItemControl> matches = new List<SearchResultItemControl>();
             foreach (SearchResultItemControl item in searchItems)
@@ -65,7 +72,8 @@ namespace MusicApp.Search
                 string itemTitle = item.title.Text;
 
                 // Allow for an edit distance of 2, without case sensitivity
-                if (LevenshteinDistance.IsFuzzyMatch(keywords.ToLower(), itemTitle.ToLower(), 2))
+                LevenshteinDistance fuzzyMatchAlgorithm = new LevenshteinDistance();
+                if (fuzzyMatchAlgorithm.IsFuzzyMatch(keywords.ToLower(), itemTitle.ToLower(), 2))
                 {
                     matches.Add(item);
                 }
@@ -74,7 +82,7 @@ namespace MusicApp.Search
             return matches;
         }
 
-        private static List<SearchResultItemControl> SortSearchResults(List<SearchResultItemControl> searchResults, int sorter, int filter)
+        private List<SearchResultItemControl> SortSearchResults(List<SearchResultItemControl> searchResults, int sorter, int filter)
         {
             List<SearchResultItemControl> sortedResults = new List<SearchResultItemControl>();
             // Determine the sorting algorithm to use and call it
@@ -96,14 +104,31 @@ namespace MusicApp.Search
                     }
                     else
                     {
-                        sortedResults = Sorters.NumericalQuickSort(searchResults);
+                        sortedResults = sortingModule.NumericalQuickSort(searchResults);
                     }
                     break;
                 case 3:
-                    sortedResults = Sorters.AlphabeticalQuickSort(searchResults);
+                    sortedResults = sortingModule.AlphabeticalQuickSort(searchResults);
                     break;
             }
             return sortedResults;
+        }
+
+        // This is here since it correponds to the search function and not the interactions with the database,
+        // but it is actually used in the database manager
+        public SearchResultItemControl AddSearchResult(string imagePath, string title, string subTitle1 = "", string subTitle2 = "", string subTitle3 = "")
+        {
+            // Create a result item control
+            SearchResultItemControl resultItem = new SearchResultItemControl();
+
+            // Set fields
+            resultItem.SetImage(imagePath);
+            resultItem.SetTitle(title);
+            resultItem.SetSubTitle1(subTitle1);
+            resultItem.SetSubTitle2(subTitle2);
+            resultItem.SetSubTitle3(subTitle3);
+
+            return resultItem;
         }
     }
 }

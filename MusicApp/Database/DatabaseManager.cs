@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows;
 using MusicApp.DataTypes;
+using MusicApp.Search;
 
 namespace MusicApp.Database
 {
@@ -9,11 +10,13 @@ namespace MusicApp.Database
     {
         // We will use the singleton design pattern to ensure only one instance of DatabaseManager exists
         private static DatabaseManager instance;
+        private SearchLogic searchLogic;
         private const string ConnectionString = "Data Source=LAPTOP-85QOQ2U8;Initial Catalog = Search Item Database; Integrated Security = True";
 
         // Private constructor to prevent instantiation from outside
         private DatabaseManager()
         {
+            searchLogic = new SearchLogic();
         }
 
         // Public static method to get the instance of Singleton class
@@ -28,7 +31,7 @@ namespace MusicApp.Database
         }
 
         // AUTHENTICATION
-        public static bool RegisterUser(string username, string password, string salt)
+        public bool RegisterUser(string username, string password, string salt)
         {
             try
             {
@@ -57,7 +60,7 @@ namespace MusicApp.Database
             return true;
         }
 
-        public static (string, string) GetCredentials(string username)
+        public (string, string) GetCredentials(string username)
         {
             try
             {
@@ -95,7 +98,7 @@ namespace MusicApp.Database
         }
 
         // SEARCH
-        public static List<Search.SearchResultItemControl> LoadUserSearchItems(List<Search.SearchResultItemControl> searchItems)
+        public List<Search.SearchResultItemControl> LoadUserSearchItems(List<Search.SearchResultItemControl> searchItems)
         {
             try
             {
@@ -119,7 +122,7 @@ namespace MusicApp.Database
                         string image = row["profilePicture"].ToString();
                         string title = row["userName"].ToString();
                         string subtitle1 = "User";
-                        searchItems.Add(Search.SearchWindow.AddSearchResult(image, title, subtitle1));
+                        searchItems.Add(searchLogic.AddSearchResult(image, title, subtitle1));
                     }
 
                     connection.Close();
@@ -132,7 +135,7 @@ namespace MusicApp.Database
             return searchItems;
         }
 
-        public static List<Search.SearchResultItemControl> LoadArtistSearchItems(List<Search.SearchResultItemControl> searchItems)
+        public List<Search.SearchResultItemControl> LoadArtistSearchItems(List<Search.SearchResultItemControl> searchItems)
         {
             try
             {
@@ -156,7 +159,7 @@ namespace MusicApp.Database
                         string image = row["artistPicture"].ToString();
                         string title = row["artistName"].ToString();
                         string subtitle1 = "Artist";
-                        searchItems.Add(Search.SearchWindow.AddSearchResult(image, title, subtitle1));
+                        searchItems.Add(searchLogic.AddSearchResult(image, title, subtitle1));
                     }
 
                     connection.Close();
@@ -169,7 +172,7 @@ namespace MusicApp.Database
             return searchItems;
         }
 
-        public static List<Search.SearchResultItemControl> LoadSongSearchItems(List<Search.SearchResultItemControl> searchItems, string genreFilter = "")
+        public List<Search.SearchResultItemControl> LoadSongSearchItems(List<Search.SearchResultItemControl> searchItems, string genreFilter = "")
         {
             try
             {
@@ -218,7 +221,7 @@ namespace MusicApp.Database
                         SqlCommand command3 = new SqlCommand(getGenreQuery, connection);
                         string subtitle3 = command3.ExecuteScalar().ToString();
 
-                        searchItems.Add(Search.SearchWindow.AddSearchResult(image, title, subtitle1, subtitle2, subtitle3));
+                        searchItems.Add(searchLogic.AddSearchResult(image, title, subtitle1, subtitle2, subtitle3));
                     }
 
                     connection.Close();
@@ -231,7 +234,7 @@ namespace MusicApp.Database
             return searchItems;
         }
 
-        public static List<Search.SearchResultItemControl> LoadAlbumSearchItems(List<Search.SearchResultItemControl> searchItems, string genreFilter = "")
+        public List<Search.SearchResultItemControl> LoadAlbumSearchItems(List<Search.SearchResultItemControl> searchItems, string genreFilter = "")
         {
             try
             {
@@ -271,7 +274,7 @@ namespace MusicApp.Database
                         // Since we know the result of the select is a single element (one row and one column) we can use ExecuteScalar() to get that value
                         string subtitle1 = command.ExecuteScalar().ToString();
 
-                        searchItems.Add(Search.SearchWindow.AddSearchResult(image, title, subtitle1, subtitle2, subtitle3));
+                        searchItems.Add(searchLogic.AddSearchResult(image, title, subtitle1, subtitle2, subtitle3));
                     }
 
                     connection.Close();
@@ -284,7 +287,7 @@ namespace MusicApp.Database
             return searchItems;
         }
 
-        public static List<ArtistModel> LoadArtists()
+        public List<ArtistModel> LoadArtists()
         {
             List<ArtistModel> artists = new List<ArtistModel>();
 
@@ -320,7 +323,7 @@ namespace MusicApp.Database
             return artists;
         }
 
-        public static List<EventModel> LoadArtistEvents(int artistId)
+        public List<EventModel> LoadArtistEvents(int artistId)
         {
             List<EventModel> events = new List<EventModel>();
 
@@ -357,7 +360,7 @@ namespace MusicApp.Database
             return events;
         }
 
-        public static List<TicketType> GetTicketTypesForEvent(int eventId)
+        public List<TicketType> GetTicketTypesForEvent(int eventId)
         {
             List<TicketType> ticketTypes = new List<TicketType>();
 
@@ -392,7 +395,7 @@ namespace MusicApp.Database
         }
 
         // PLAYLIST/PLAYER
-        public static List<string> LoadPlaylist()
+        public List<string> LoadPlaylist()
         {
             List<string> playlist = new List<string>();
 
@@ -425,7 +428,7 @@ namespace MusicApp.Database
             return playlist;
         }
 
-        public static List<Playlist> LoadAllPlaylists()
+        public List<Playlist> LoadAllPlaylists()
         {
             List<Playlist> playlists = new List<Playlist>();
 
@@ -465,7 +468,7 @@ namespace MusicApp.Database
             return playlists;
         }
 
-        public static List<Playlist> SearchPlaylists(string searchQuery)
+        public List<Playlist> SearchPlaylists(string searchQuery)
         {
             List<Playlist> playlists = new List<Playlist>();
 
@@ -506,7 +509,7 @@ namespace MusicApp.Database
             return playlists;
         }
 
-        public static bool DeletePlaylist(string name)
+        public bool DeletePlaylist(string name)
         {
             int rowsAffected = 0;
 
@@ -535,7 +538,7 @@ namespace MusicApp.Database
             return rowsAffected > 0;
         }
 
-        public static bool InsertPlaylist(string name, string description)
+        public bool InsertPlaylist(string name, string description)
         {
             int rowsAffected = 0;
 
@@ -567,7 +570,7 @@ namespace MusicApp.Database
             return rowsAffected > 0;
         }
 
-        public static List<Song> LoadPlaylistSongs(int playlistID)
+        public List<Song> LoadPlaylistSongs(int playlistID)
         {
             List<Song> songs = new List<Song>();
 
@@ -604,7 +607,7 @@ namespace MusicApp.Database
             return songs;
         }
 
-        public static bool InsertSongsIntoPlaylist(int playlistID, List<Song> songs)
+        public bool InsertSongsIntoPlaylist(int playlistID, List<Song> songs)
         {
             try
             {
@@ -638,7 +641,7 @@ namespace MusicApp.Database
             }
         }
 
-        public static bool DeleteSongFromPlaylist(int playlistID, string songTitle)
+        public bool DeleteSongFromPlaylist(int playlistID, string songTitle)
         {
             try
             {
@@ -669,7 +672,7 @@ namespace MusicApp.Database
         }
 
         // FEEDBACK
-        public static Song LoadSong(int songID)
+        public Song LoadSong(int songID)
         {
             Song loadedSong;
 
@@ -715,7 +718,7 @@ namespace MusicApp.Database
             }
         }
 
-        public static List<string> LoadComments(int songID)
+        public List<string> LoadComments(int songID)
         {
             List<string> previousComments = new List<string>();
 
@@ -750,7 +753,7 @@ namespace MusicApp.Database
             return previousComments;
         }
 
-        public static bool InsertNewFeedback(int songID, int userRating, string comment)
+        public bool InsertNewFeedback(int songID, int userRating, string comment)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {

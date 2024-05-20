@@ -10,10 +10,10 @@ namespace MusicApp.Security
 {
     public class Security
     {
-        private static readonly byte[] Key = Encoding.UTF8.GetBytes("HolaEstaEsClave1");
-        private static readonly byte[] IV = Encoding.UTF8.GetBytes("Vector_init1910*");
+        private readonly static byte[] Key = Encoding.UTF8.GetBytes("HolaEstaEsClave1");
+        private readonly static byte[] IV = Encoding.UTF8.GetBytes("Vector_init1910*");
 
-        public static string EncryptData(string plainText)
+        public string EncryptData(string plainText)
         {
             using Aes encryiption = Aes.Create();
             encryiption.Key = Key;
@@ -37,7 +37,7 @@ namespace MusicApp.Security
 
             return Convert.ToBase64String(encryptedBytes);
         }
-        public static string DecryptData(string cipherText)
+        public string DecryptData(string cipherText)
         {
             byte[] cipherBytes = Convert.FromBase64String(cipherText);
 

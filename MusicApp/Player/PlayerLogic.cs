@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using MusicApp.Database;
 using MusicApp.DataTypes;
 
 namespace MusicApp.Player
@@ -42,7 +43,7 @@ namespace MusicApp.Player
         // TODO: Integrate loading playlists into the player
         private void InitializePlaylist()
         {
-            playlist = Database.DatabaseManager.LoadPlaylist();
+            playlist = DatabaseManager.GetInstance().LoadPlaylist();
         }
 
         internal void GoToPreviousSong()

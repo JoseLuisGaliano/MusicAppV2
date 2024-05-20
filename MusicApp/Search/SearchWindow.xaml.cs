@@ -9,26 +9,12 @@ namespace MusicApp.Search
     /// </summary>
     public partial class SearchWindow : Window
     {
+        private SearchLogic searchLogic;
+
         public SearchWindow()
         {
+            searchLogic = new SearchLogic();
             InitializeComponent();
-        }
-
-        // This is here since it correponds to the search function and not the interactions with the database,
-        // but it is actually used in the database manager
-        public static SearchResultItemControl AddSearchResult(string imagePath, string title, string subTitle1 = "", string subTitle2 = "", string subTitle3 = "")
-        {
-            // Create a result item control
-            SearchResultItemControl resultItem = new SearchResultItemControl();
-
-            // Set fields
-            resultItem.SetImage(imagePath);
-            resultItem.SetTitle(title);
-            resultItem.SetSubTitle1(subTitle1);
-            resultItem.SetSubTitle2(subTitle2);
-            resultItem.SetSubTitle3(subTitle3);
-
-            return resultItem;
         }
 
         private void SearchButton(object sender, RoutedEventArgs e)
@@ -41,7 +27,7 @@ namespace MusicApp.Search
             string genre = genreInput.Text;
             string keywords = searchInput.Text;
             int sorter = sortComboBox.SelectedIndex;
-            List<SearchResultItemControl> searchResults = SearchLogic.GetSearchResults(filter, genre, keywords, sorter);
+            List<SearchResultItemControl> searchResults = searchLogic.GetSearchResults(filter, genre, keywords, sorter);
 
             // Show results
             DisplaySearchResults(searchResults);

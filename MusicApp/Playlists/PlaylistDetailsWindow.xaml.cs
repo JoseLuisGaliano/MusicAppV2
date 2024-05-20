@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MusicApp.Database;
 using MusicApp.DataTypes;
 
 namespace MusicApp.Playlists
@@ -30,7 +31,7 @@ namespace MusicApp.Playlists
         private void LoadSongsFromDatabase()
         {
             // Load songs from this playlist from the database
-            List<Song> songs = Database.DatabaseManager.LoadPlaylistSongs(playlistID);
+            List<Song> songs = DatabaseManager.GetInstance().LoadPlaylistSongs(playlistID);
             // Update GUI layout
             SongsListBox.ItemsSource = songs;
         }

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using MusicApp.Database;
 using MusicApp.DataTypes;
 
 namespace MusicApp.Events
@@ -37,7 +38,7 @@ namespace MusicApp.Events
         {
             if (ticketTypeComboBox.SelectedItem is TicketType selectedTicket)
             {
-                Database.DatabaseManager.GetTicketTypesForEvent(selectedTicket.EventID);
+                DatabaseManager.GetInstance().GetTicketTypesForEvent(selectedTicket.EventID);
             }
         }
 

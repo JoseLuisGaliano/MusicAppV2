@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MusicApp.Database;
 using MusicApp.DataTypes;
 
 namespace MusicApp.Playlists
@@ -12,6 +13,7 @@ namespace MusicApp.Playlists
         public ObservableCollection<string> PreviousComments { get; set; }
         private int songID;
         private int userRating = 0;
+        private PlaylistLogic playlistLogic;
 
         public FeedbackWindow(Song song)
         {
@@ -20,6 +22,7 @@ namespace MusicApp.Playlists
             int songID = song.ID;
             this.songID = songID;
             PreviousComments = new ObservableCollection<string>();
+            playlistLogic = new PlaylistLogic();
 
             LoadSongDetails();
             LoadPreviousComments();
@@ -29,7 +32,7 @@ namespace MusicApp.Playlists
         private void LoadSongDetails()
         {
             // Load song from the database
-            Song song = Database.DatabaseManager.LoadSong(songID);
+            Song song = DatabaseManager.GetInstance().LoadSong(songID);
             // Update GUI layout
             SongNameTextBlock.Text = song.SongTitle;
             ArtistNameTextBlock.Text = song.ArtistName;
@@ -41,7 +44,7 @@ namespace MusicApp.Playlists
             // Clear comment section
             PreviousComments.Clear();
             // Load comments from the database
-            List<string> comments = Database.DatabaseManager.LoadComments(songID);
+            List<string> comments = DatabaseManager.GetInstance().LoadComments(songID);
             // Update GUI list view
             comments.ForEach(x => PreviousComments.Add(x));
         }
@@ -72,7 +75,7 @@ namespace MusicApp.Playlists
         private void SubmitButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             string comment = CommentTextBox.Text.Trim();
-            bool success = PlaylistLogic.SubmitFeedback(songID, userRating, comment);
+            bool success = playlistLogic.SubmitFeedback(songID, userRating, comment);
             if (success)
             {
                 PreviousComments.Insert(0, comment); // Add the comment to the top of the list

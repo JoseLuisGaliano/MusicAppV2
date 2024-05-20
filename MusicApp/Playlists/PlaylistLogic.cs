@@ -1,12 +1,17 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using MusicApp.Database;
 using MusicApp.DataTypes;
 
 namespace MusicApp.Playlists
 {
-    public static class PlaylistLogic
+    public class PlaylistLogic
     {
-        public static bool DeletePlaylist(string selectedPlaylistName)
+        public PlaylistLogic()
+        {
+        }
+
+        public bool DeletePlaylist(string selectedPlaylistName)
         {
             if (string.IsNullOrEmpty(selectedPlaylistName))
             {
@@ -17,7 +22,7 @@ namespace MusicApp.Playlists
             var result = MessageBox.Show($"Are you sure you want to delete '{selectedPlaylistName}'?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
-                bool playlistDeleted = Database.DatabaseManager.DeletePlaylist(selectedPlaylistName);
+                bool playlistDeleted = DatabaseManager.GetInstance().DeletePlaylist(selectedPlaylistName);
                 if (playlistDeleted)
                 {
                     MessageBox.Show("Playlist deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -32,7 +37,7 @@ namespace MusicApp.Playlists
             return false;
         }
 
-        public static void ShowDetails(Button button)
+        public void ShowDetails(Button button)
         {
             if (button != null)
             {
@@ -49,7 +54,7 @@ namespace MusicApp.Playlists
             }
         }
 
-        public static bool AddPlaylist(string name, string description)
+        public bool AddPlaylist(string name, string description)
         {
             // Verify the input fields are not empty
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
@@ -59,7 +64,7 @@ namespace MusicApp.Playlists
             }
 
             // Add playlist to database
-            bool added = Database.DatabaseManager.InsertPlaylist(name, description);
+            bool added = DatabaseManager.GetInstance().InsertPlaylist(name, description);
             if (added)
             {
                 MessageBox.Show("Playlist added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -72,7 +77,7 @@ namespace MusicApp.Playlists
             }
         }
 
-        public static bool AddSongsToPlaylist(int playlistID, List<Song> playlistSongs)
+        public bool AddSongsToPlaylist(int playlistID, List<Song> playlistSongs)
         {
             var selectSongsWindow = new SelectSongsWindow();
             bool result = true;
@@ -85,7 +90,7 @@ namespace MusicApp.Playlists
                 {
                     playlistSongs.Add(song);
                     // Save changes
-                    bool resultState = Database.DatabaseManager.InsertSongsIntoPlaylist(playlistID, playlistSongs);
+                    bool resultState = DatabaseManager.GetInstance().InsertSongsIntoPlaylist(playlistID, playlistSongs);
                     if (!resultState)
                     {
                         result = false;
@@ -95,7 +100,7 @@ namespace MusicApp.Playlists
             return result;
         }
 
-        public static bool RemoveSongFromPlaylist(int playlistID, Song selectedSong)
+        public bool RemoveSongFromPlaylist(int playlistID, Song selectedSong)
         {
             if (selectedSong != null)
             {
@@ -103,7 +108,7 @@ namespace MusicApp.Playlists
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    bool success = Database.DatabaseManager.DeleteSongFromPlaylist(playlistID, selectedSong.SongTitle);
+                    bool success = DatabaseManager.GetInstance().DeleteSongFromPlaylist(playlistID, selectedSong.SongTitle);
                     return success;
                 }
                 return false;
@@ -115,7 +120,7 @@ namespace MusicApp.Playlists
             }
         }
 
-        public static bool SubmitFeedback(int songID, int userRating, string comment)
+        public bool SubmitFeedback(int songID, int userRating, string comment)
         {
             if (string.IsNullOrEmpty(comment))
             {
@@ -123,7 +128,7 @@ namespace MusicApp.Playlists
                 return false;
             }
 
-            bool success = Database.DatabaseManager.InsertNewFeedback(songID, userRating, comment);
+            bool success = DatabaseManager.GetInstance().InsertNewFeedback(songID, userRating, comment);
             return success;
         }
     }
