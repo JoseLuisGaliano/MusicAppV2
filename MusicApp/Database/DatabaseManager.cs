@@ -5,9 +5,27 @@ using MusicApp.DataTypes;
 
 namespace MusicApp.Database
 {
-    public static class DatabaseManager
+    public class DatabaseManager
     {
+        // We will use the singleton design pattern to ensure only one instance of DatabaseManager exists
+        private static DatabaseManager instance;
         private const string ConnectionString = "Data Source=LAPTOP-85QOQ2U8;Initial Catalog = Search Item Database; Integrated Security = True";
+
+        // Private constructor to prevent instantiation from outside
+        private DatabaseManager()
+        {
+        }
+
+        // Public static method to get the instance of Singleton class
+        public static DatabaseManager GetInstance()
+        {
+            // Lazy initialization - instance is created only when needed
+            if (instance == null)
+            {
+                instance = new DatabaseManager();
+            }
+            return instance;
+        }
 
         // AUTHENTICATION
         public static bool RegisterUser(string username, string password, string salt)

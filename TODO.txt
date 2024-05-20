@@ -1,0 +1,14 @@
+TODO
+
+> eliminate all static classes
+> better GUI + program window flow
+> make data types universal -> database manager reduced complexity
+> adjust database manager queries according to the final database model
+> asp .net database (???)
+> actually finish all functionalities
+   > improve chat
+   > make events work (ticket type problem)
+   > make player work (song paths problem)
+   > implement a good profile
+   > add levenshtein automaton search engine
+   > actually use security module
