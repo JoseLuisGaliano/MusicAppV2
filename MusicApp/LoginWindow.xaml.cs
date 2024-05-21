@@ -27,6 +27,10 @@ namespace MusicApp
             {
                 MessageBox.Show("Error while logging in. Please try again", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            MainWindow menu = new MainWindow();
+            menu.Show();
+            Close();
         }
 
         public void SignInButtonClick(object sender, RoutedEventArgs e)

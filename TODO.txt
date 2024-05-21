@@ -11,4 +11,5 @@ TODO
    > add levenshtein automaton search engine
    > actually use security module
    > artist profiles
-   > make search actually useful (add songs to playlists from the search window, let you see artist profiles)
+   > make search actually useful 
+   	> adding songs to playlists should take you to the search window, and you add them from there

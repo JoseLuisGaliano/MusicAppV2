@@ -10,7 +10,7 @@ namespace MusicApp.Database
         // We will use the singleton design pattern to ensure only one instance of DatabaseManager exists
         private static DatabaseManager instance;
         private Search.SearchLogic searchLogic;
-        private const string ConnectionString = "Data Source=LAPTOP-85QOQ2U8;Initial Catalog = Search Item Database; Integrated Security = True";
+        private const string ConnectionString = "Data Source=LAPTOP-85QOQ2U8;Initial Catalog = MusicAppDB; Integrated Security = True";
 
         // Private constructor to prevent instantiation from outside
         private DatabaseManager()
