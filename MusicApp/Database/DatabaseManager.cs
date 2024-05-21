@@ -2,7 +2,6 @@
 using System.Data;
 using System.Windows;
 using MusicApp.DataTypes;
-using MusicApp.Search;
 
 namespace MusicApp.Database
 {
@@ -10,13 +9,13 @@ namespace MusicApp.Database
     {
         // We will use the singleton design pattern to ensure only one instance of DatabaseManager exists
         private static DatabaseManager instance;
-        private SearchLogic searchLogic;
+        private Search.SearchLogic searchLogic;
         private const string ConnectionString = "Data Source=LAPTOP-85QOQ2U8;Initial Catalog = Search Item Database; Integrated Security = True";
 
         // Private constructor to prevent instantiation from outside
         private DatabaseManager()
         {
-            searchLogic = new SearchLogic();
+            searchLogic = new Search.SearchLogic();
         }
 
         // Public static method to get the instance of Singleton class
@@ -31,6 +30,80 @@ namespace MusicApp.Database
         }
 
         // AUTHENTICATION
+        private int ResolveUserID()
+        {
+            string username = Sesion.GetInstance().Username;
+            int id = -1;
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+
+                    // Build query
+                    string query = "SELECT userID FROM [USER] WHERE username = " + username + ";";
+
+                    // Execute query
+                    SqlCommand command = new SqlCommand(query, connection);
+                    // Since we know the result of the select is a single element (one row and one column) we can use ExecuteScalar() to get that value
+                    id = (int)command.ExecuteScalar(); // We know it is an int
+
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while retrieving userID from the database: " + ex.Message);
+            }
+
+            return id;
+        }
+
+        public void BeginSesion(string username)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+
+                    // Build query
+                    string query = "UPDATE [USER] SET isActive = 1 WHERE username = " + username + ";";
+
+                    // Execute query
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Warning: user sesion not properly updated in the database. Error while beginning user sesion: " + ex.Message);
+            }
+        }
+
+        public void EndSesion(string username)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+
+                    // Build query
+                    string query = "UPDATE [USER] SET isActive = 0 WHERE username = " + username + ";";
+
+                    // Execute query
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Warning: user sesion not properly updated in the database. Error while ending user sesion: " + ex.Message);
+            }
+        }
+
         public bool RegisterUser(string username, string password, string salt)
         {
             try
@@ -39,9 +112,12 @@ namespace MusicApp.Database
                 {
                     connection.Open();
 
-                    string query = "INSERT INTO [USER] (userName, profilePicture, subscriptionPlan, hashedPassword, salt) VALUES (@userName, @profilePicture, @subscriptionPlan, @hashedPassword, @salt);";
+                    string query = "INSERT INTO [USER] (username, email, dateJoined, isActive, profilePicture, subscriptionPlan, hashedPassword, salt) VALUES (@username, @email, @dateJoined, @isActive, @profilePicture, @subscriptionPlan, @hashedPassword, @salt);";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@userName", username);
+                    command.Parameters.AddWithValue("@username", username);
+                    command.Parameters.AddWithValue("@email", " ");
+                    command.Parameters.AddWithValue("@dateJoined", DateTime.Today);
+                    command.Parameters.AddWithValue("@isActive", 0);
                     command.Parameters.AddWithValue("@profilePicture", " ");
                     command.Parameters.AddWithValue("@subscriptionPlan", " ");
                     command.Parameters.AddWithValue("@hashedPassword", password);
@@ -120,7 +196,7 @@ namespace MusicApp.Database
                     foreach (DataRow row in dataTable.Rows)
                     {
                         string image = row["profilePicture"].ToString();
-                        string title = row["userName"].ToString();
+                        string title = row["username"].ToString();
                         string subtitle1 = "User";
                         searchItems.Add(searchLogic.AddSearchResult(image, title, subtitle1));
                     }
@@ -184,7 +260,7 @@ namespace MusicApp.Database
                     string query;
                     if (genreFilter != " ")
                     {
-                        query = "SELECT * FROM SONG WHERE album IN ( SELECT albumId FROM ALBUM WHERE genre = '" + genreFilter + "');";
+                        query = "SELECT * FROM SONG WHERE albumID IN ( SELECT albumID FROM ALBUM WHERE albumGenre = '" + genreFilter + "');";
                     }
                     else
                     {
@@ -201,23 +277,23 @@ namespace MusicApp.Database
                     // Convert each row into a search result item
                     foreach (DataRow row in dataTable.Rows)
                     {
-                        string title = row["songName"].ToString();
+                        string title = row["songTitle"].ToString();
 
                         // Resolve the database references (foreign keys) to properly pass the data to AddSearchResult()
-                        string getImageQuery = "SELECT albumPicture FROM ALBUM WHERE albumId = (SELECT album FROM SONG WHERE songName = '" + title + "');";
+                        string getImageQuery = "SELECT albumPicture FROM ALBUM WHERE albumID = (SELECT albumID FROM SONG WHERE songTitle = '" + title + "');";
                         SqlCommand command = new SqlCommand(getImageQuery, connection);
                         string image = command.ExecuteScalar().ToString();
 
-                        string getArtistQuery = "SELECT artistName FROM ARTIST WHERE artistId = ( SELECT albumArtist FROM ALBUM WHERE albumId = ( SELECT album FROM SONG WHERE songName = '" + title + "'));";
+                        string getArtistQuery = "SELECT artistName FROM ARTIST WHERE artistID = ( SELECT albumArtist FROM ALBUM WHERE albumID = ( SELECT albumID FROM SONG WHERE songTitle = '" + title + "'));";
                         SqlCommand command1 = new SqlCommand(getArtistQuery, connection);
                         // Since we know the result of the select is a single element (one row and one column) we can use ExecuteScalar() to get that value
                         string subtitle1 = command1.ExecuteScalar().ToString();
 
-                        string getDateQuery = "SELECT [date] FROM ALBUM WHERE albumId = (SELECT album FROM SONG WHERE songName = '" + title + "');";
+                        string getDateQuery = "SELECT albumReleaseDate FROM ALBUM WHERE albumID = (SELECT albumID FROM SONG WHERE songTitle = '" + title + "');";
                         SqlCommand command2 = new SqlCommand(getDateQuery, connection);
                         string subtitle2 = command2.ExecuteScalar().ToString();
 
-                        string getGenreQuery = "SELECT genre FROM ALBUM WHERE albumId = (SELECT album FROM SONG WHERE songName = '" + title + "');";
+                        string getGenreQuery = "SELECT albumGenre FROM ALBUM WHERE albumID = (SELECT albumID FROM SONG WHERE songTitle = '" + title + "');";
                         SqlCommand command3 = new SqlCommand(getGenreQuery, connection);
                         string subtitle3 = command3.ExecuteScalar().ToString();
 
@@ -246,7 +322,7 @@ namespace MusicApp.Database
                     string query;
                     if (genreFilter != string.Empty)
                     {
-                        query = "SELECT * FROM ALBUM WHERE genre = '" + genreFilter + "';";
+                        query = "SELECT * FROM ALBUM WHERE albumGenre = '" + genreFilter + "';";
                     }
                     else
                     {
@@ -264,12 +340,12 @@ namespace MusicApp.Database
                     foreach (DataRow row in dataTable.Rows)
                     {
                         string image = row["albumPicture"].ToString();
-                        string title = row["albumName"].ToString();
-                        string subtitle2 = row["date"].ToString();
-                        string subtitle3 = row["genre"].ToString();
+                        string title = row["albumTitle"].ToString();
+                        string subtitle2 = row["albumReleaseDate"].ToString();
+                        string subtitle3 = row["albumGenre"].ToString();
 
                         // Resolve the database references (foreign keys) to properly pass the data to AddSearchResult()
-                        string getArtistQuery = "SELECT artistName FROM ARTIST WHERE artistId = ( SELECT albumArtist FROM ALBUM WHERE albumName = '" + title + "');";
+                        string getArtistQuery = "SELECT artistName FROM ARTIST WHERE artistID = ( SELECT albumArtist FROM ALBUM WHERE albumTitle = '" + title + "');";
                         SqlCommand command = new SqlCommand(getArtistQuery, connection);
                         // Since we know the result of the select is a single element (one row and one column) we can use ExecuteScalar() to get that value
                         string subtitle1 = command.ExecuteScalar().ToString();
@@ -298,7 +374,7 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "SELECT ArtistID, Name FROM Artists";
+                    string query = "SELECT artistID, Name FROM ARTIST";
                     SqlCommand command = new SqlCommand(query, connection);
 
                     // Execute query and build list
@@ -308,7 +384,7 @@ namespace MusicApp.Database
                         artists.Add(new ArtistModel
                         {
                             ArtistID = (int)reader["ArtistID"],
-                            Name = reader["Name"].ToString()
+                            Name = reader["artistName"].ToString()
                         });
                     }
 
@@ -334,7 +410,7 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = $"SELECT Name, Location, DateTime FROM Events WHERE ArtistID = {artistId}";
+                    string query = $"SELECT eventName, eventLocation, eventDate FROM [EVENT] WHERE artistID = {artistId}";
                     SqlCommand command = new SqlCommand(query, connection);
 
                     // Execute query and build list
@@ -343,9 +419,9 @@ namespace MusicApp.Database
                     {
                         events.Add(new EventModel
                         {
-                            Name = reader["Name"].ToString(),
-                            Location = reader["Location"].ToString(),
-                            DateTime = Convert.ToDateTime(reader["DateTime"])
+                            Name = reader["eventName"].ToString(),
+                            Location = reader["eventLocation"].ToString(),
+                            DateTime = Convert.ToDateTime(reader["eventDate"])
                         });
                     }
 
@@ -439,7 +515,7 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "SELECT PlaylistID, Name, Description, CreationDate FROM Playlists";
+                    string query = "SELECT playlistID, playlistName, playlistDescription, playlistCreationDate FROM PLAYLIST";
                     SqlCommand command = new SqlCommand(query, connection);
 
                     // Execute query and build list
@@ -448,10 +524,10 @@ namespace MusicApp.Database
                     {
                         playlists.Add(new Playlist
                         {
-                            PlaylistID = Convert.ToInt32(reader["PlaylistID"]),
-                            Name = reader["Name"].ToString(),
-                            Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? string.Empty : reader["Description"].ToString(),
-                            CreationDate = Convert.ToDateTime(reader["CreationDate"]),
+                            PlaylistID = Convert.ToInt32(reader["playlistID"]),
+                            Name = reader["playlistName"].ToString(),
+                            Description = reader.IsDBNull(reader.GetOrdinal("playlistDescription")) ? string.Empty : reader["playlistDescription"].ToString(),
+                            CreationDate = Convert.ToDateTime(reader["playlistCreationDate"]),
                             IsLiked = false,  // Asumiendo estado inicial
                             IsFollowed = false// Asumiendo estado inicial
                         });
@@ -479,7 +555,7 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "SELECT PlaylistID, Name, Description, CreationDate FROM Playlists WHERE LOWER(Name) LIKE @searchQuery";
+                    string query = "SELECT playlistID, playlistName, playlistDescription, playlistCreationDate FROM PLAYLIST WHERE LOWER(playlistName) LIKE @searchQuery";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@searchQuery", $"%{searchQuery}%");
 
@@ -489,10 +565,10 @@ namespace MusicApp.Database
                     {
                         playlists.Add(new Playlist
                         {
-                            PlaylistID = Convert.ToInt32(reader["PlaylistID"]),
+                            PlaylistID = Convert.ToInt32(reader["playlistID"]),
                             Name = reader["Name"].ToString(),
-                            Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? string.Empty : reader["Description"].ToString(),
-                            CreationDate = Convert.ToDateTime(reader["CreationDate"]),
+                            Description = reader.IsDBNull(reader.GetOrdinal("playlistDescription")) ? string.Empty : reader["playlistDescription"].ToString(),
+                            CreationDate = Convert.ToDateTime(reader["playlistCreationDate"]),
                             IsLiked = false,
                             IsFollowed = false
                         });
@@ -520,9 +596,9 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "DELETE FROM Playlists WHERE Name = @Name";
+                    string query = "DELETE FROM PLAYLIST WHERE playlistName = @playlistName";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@Name", name);
+                    command.Parameters.AddWithValue("@playlistName", name);
 
                     // Execute query
                     rowsAffected = command.ExecuteNonQuery();
@@ -549,12 +625,12 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "INSERT INTO Playlists (OwnerID, Name, Description, CreationDate) VALUES (@OwnerID, @Name, @Description, @CreationDate)";
+                    string query = "INSERT INTO Playlists (ownerID, playlistName, playlistDescription, playlistCreationDate) VALUES (@ownerID, @playlistName, @playlistDescription, @playlistCreationDate)";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@OwnerID", 1); // 1 is an example owner
-                    command.Parameters.AddWithValue("@Name", name);
-                    command.Parameters.AddWithValue("@Description", description);
-                    command.Parameters.AddWithValue("@CreationDate", DateTime.Now);
+                    command.Parameters.AddWithValue("@ownerID", ResolveUserID());
+                    command.Parameters.AddWithValue("@playlistName", name);
+                    command.Parameters.AddWithValue("@playlistDescription", description);
+                    command.Parameters.AddWithValue("@playlistCreationDate", DateTime.Today);
 
                     // Execute query
                     rowsAffected = command.ExecuteNonQuery();
@@ -581,9 +657,9 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "SELECT s.Title, a.Name AS ArtistName FROM Songs s JOIN PlaylistSongs ps ON s.SongID = ps.SongID JOIN Artists a ON s.ArtistID = a.ArtistID WHERE ps.PlaylistID = @PlaylistID";
+                    string query = "SELECT songTitle, a.artistName AS artistName FROM SONG s JOIN PLAYLISTSONG ps ON s.songID = ps.songID JOIN ARTIST a ON s.artistID = a.artistID WHERE ps.playlistID = @playlistID;";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@PlaylistID", playlistID);
+                    command.Parameters.AddWithValue("@playlistID", playlistID);
 
                     // Execute query and build list
                     SqlDataReader reader = command.ExecuteReader();
@@ -591,8 +667,8 @@ namespace MusicApp.Database
                     {
                         songs.Add(new Song
                         {
-                            SongTitle = reader["Title"].ToString(),
-                            ArtistName = reader["ArtistName"].ToString()
+                            SongTitle = reader["songTitle"].ToString(),
+                            ArtistName = reader["artistName"].ToString()
                         });
                     }
 
@@ -618,12 +694,12 @@ namespace MusicApp.Database
                     // Insert new songs into the playlist in the database
                     foreach (var song in songs)
                     {
-                        string insertQuery = @"INSERT INTO PlaylistSongs (PlaylistID, SongID) 
-                                               VALUES (@PlaylistID, (SELECT SongID FROM Songs WHERE Title = @SongTitle))";
+                        string insertQuery = @"INSERT INTO PLAYLISTSONG (playlistID, songID) 
+                                               VALUES (@playlistID, (SELECT songID FROM SONG WHERE songTitle = @songTitle))";
                         using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
                         {
-                            insertCommand.Parameters.AddWithValue("@PlaylistID", playlistID);
-                            insertCommand.Parameters.AddWithValue("@SongTitle", song.SongTitle);
+                            insertCommand.Parameters.AddWithValue("@playlistID", playlistID);
+                            insertCommand.Parameters.AddWithValue("@songTitle", song.SongTitle);
                             insertCommand.ExecuteNonQuery();
                         }
                     }
@@ -650,10 +726,10 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = @"DELETE FROM PlaylistSongs WHERE PlaylistID = @PlaylistID AND SongID = (SELECT SongID FROM Songs WHERE Title = @SongTitle)";
+                    string query = @"DELETE FROM playlistSongs WHERE playlistID = @playlistID AND songID = (SELECT songID FROM SONG WHERE songTitle = @songTitle)";
                     SqlCommand deleteCommand = new SqlCommand(query, connection);
-                    deleteCommand.Parameters.AddWithValue("@PlaylistID", playlistID);
-                    deleteCommand.Parameters.AddWithValue("@SongTitle", songTitle);
+                    deleteCommand.Parameters.AddWithValue("@playlistID", playlistID);
+                    deleteCommand.Parameters.AddWithValue("@songTitle", songTitle);
 
                     // Execute query
                     deleteCommand.ExecuteNonQuery();
@@ -684,13 +760,13 @@ namespace MusicApp.Database
 
                     // Build query
                     string query = @"
-                    SELECT Songs.Title, Artists.Name, Albums.CoverArt
-                    FROM Songs
-                    INNER JOIN Artists ON Songs.ArtistID = Artists.ArtistID
-                    INNER JOIN Albums ON Songs.AlbumID = Albums.AlbumID
-                    WHERE Songs.SongID = @SongID";
+                    SELECT SONG.songTitle, ARTIST.artistName, ALBUM.albumPicture
+                    FROM SONG
+                    INNER JOIN ARTIST ON SONG.artistID = ARTIST.artistID
+                    INNER JOIN ALBUM ON SONG.albumID = ALBUM.albumID
+                    WHERE SONG.songID = @songID";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@SongID", songID);
+                    command.Parameters.AddWithValue("@songID", songID);
 
                     // Execute query
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -700,9 +776,9 @@ namespace MusicApp.Database
                             // Build Song object
                             loadedSong = new Song
                             {
-                                SongTitle = reader.GetString(0),
-                                ArtistName = reader.GetString(1),
-                                CoverImage = reader.GetString(2)
+                                SongTitle = reader["songTitle"].ToString(),
+                                ArtistName = reader["artistName"].ToString(),
+                                CoverImage = reader["albumPicture"].ToString()
                             };
 
                             return loadedSong;
@@ -729,17 +805,17 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "SELECT Comment, Username FROM Feedback INNER JOIN Users ON Feedback.UserID = Users.UserID WHERE SongID = @SongID ORDER BY DateAndTime DESC";
+                    string query = "SELECT Comment, Username FROM FEEDBACK INNER JOIN [USER] ON FEEDBACK.userID = [USER].userID WHERE songID = @songID ORDER BY feedbackDate DESC";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@SongID", songID);
+                    command.Parameters.AddWithValue("@songID", songID);
 
                     // Execute command and build list
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            string comment = reader.GetString(0);
-                            string username = reader.GetString(1);
+                            string comment = reader["Comment"].ToString();
+                            string username = reader["Username"].ToString();
                             previousComments.Add(username + ": " + comment);
                         }
                     }
@@ -763,14 +839,14 @@ namespace MusicApp.Database
 
                     // Build query
                     string query = @"
-                    INSERT INTO Feedback (UserID, SongID, Rating, Comment, DateAndTime)
-                    VALUES (@UserID, @SongID, @Rating, @Comment, @DateAndTime)";
+                    INSERT INTO FEEDBACK (userID, songID, rating, Comment, feedbackDate)
+                    VALUES (@userID, @songID, @rating, @Comment, @feedbackDate)";
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@UserID", 1);
-                    command.Parameters.AddWithValue("@SongID", songID);
-                    command.Parameters.AddWithValue("@Rating", userRating);
+                    command.Parameters.AddWithValue("@userID", ResolveUserID());
+                    command.Parameters.AddWithValue("@songID", songID);
+                    command.Parameters.AddWithValue("@rating", userRating);
                     command.Parameters.AddWithValue("@Comment", comment);
-                    command.Parameters.AddWithValue("@DateAndTime", DateTime.Now);
+                    command.Parameters.AddWithValue("@feedbackDate", DateTime.Now);
 
                     // Execute query
                     int result = command.ExecuteNonQuery();

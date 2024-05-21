@@ -1,8 +1,7 @@
 TODO
 
 > better GUI + program window flow
-> reduce database manager complexity
-> adjust database manager queries according to the final database model
+> reduce database manager complexity (not sure that is possible...)
 > asp .net database (???)
 > actually finish all functionalities
    > improve chat
@@ -11,3 +10,5 @@ TODO
    > implement a good profile
    > add levenshtein automaton search engine
    > actually use security module
+   > artist profiles
+   > make search actually useful (add songs to playlists from the search window, let you see artist profiles)
