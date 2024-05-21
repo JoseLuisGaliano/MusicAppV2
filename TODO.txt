@@ -13,7 +13,6 @@ TODO
    
    MEDIUM PRIORITY
    > actually use security module
-   > integrate payment method into buy window
 
    LOW PRIORITY
    > improve chat
