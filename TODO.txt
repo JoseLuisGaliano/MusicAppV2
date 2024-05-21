@@ -1,16 +1,15 @@
 TODO
 
-> better GUI + program window flow
-> reduce database manager complexity (not sure that is possible...)
+[MIGUEL] > better GUI + program window flow
 > asp .net database (???)
 > actually finish all functionalities:
    
    HIGH PRIORITY
-   > make player work (song paths problem)
-   > implement a good profile
+   [NICO] > make player work (song paths problem)
+   [DAVIDE] > implement a good profile
    > integrate payment method into buy window
-   > make search actually useful 
-   	> adding songs to playlists should take you to the search window, and you add them from there
+   [JOSELU] > make search actually useful 
+   	        > adding songs to playlists should take you to the search window, and you add them from there
    
    MEDIUM PRIORITY
    > actually use security module
