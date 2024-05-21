@@ -11,6 +11,7 @@ namespace MusicApp.Events
         private DateTime eventDate;
         private int eventId;
         private List<TicketType> ticketTypes;
+        private EventsLogic eventsLogic;
 
         public Buy(string location, DateTime eventDate, int eventId, List<TicketType> ticketTypes)
         {
@@ -19,6 +20,7 @@ namespace MusicApp.Events
             this.eventDate = eventDate;
             this.eventId = eventId;
             this.ticketTypes = ticketTypes;
+            eventsLogic = new EventsLogic();
             LoadEventData();
         }
 
@@ -48,7 +50,7 @@ namespace MusicApp.Events
             {
                 int.TryParse(quantityTextBox.Text, out int quantity);
                 // Go to purchase window and close this one
-                EventsLogic.PurchaseTickets(selectedTicketType, quantity, location, eventDate);
+                eventsLogic.PurchaseTickets(selectedTicketType, quantity, location, eventDate);
                 Close();
             }
             else

@@ -7,8 +7,12 @@ namespace MusicApp.Events
 {
     public partial class Event : Window
     {
+        private EventsLogic eventsLogic;
+
         public Event()
         {
+            eventsLogic = new EventsLogic();
+
             InitializeComponent();
             LoadArtists();
         }
@@ -45,7 +49,7 @@ namespace MusicApp.Events
             if (EventsListBox.SelectedItem is EventModel selectedEvent)
             {
                 // Get ticket types and go to ticket window
-                EventsLogic.GetTicketTypesForEvent(selectedEvent.Location, selectedEvent.DateTime, selectedEvent.EventID);
+                eventsLogic.GetTicketTypesForEvent(selectedEvent.Location, selectedEvent.DateTime, selectedEvent.EventID);
                 // Close events window
                 Close();
             }

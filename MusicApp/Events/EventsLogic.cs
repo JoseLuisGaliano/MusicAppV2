@@ -4,9 +4,9 @@ using MusicApp.DataTypes;
 
 namespace MusicApp.Events
 {
-    public static class EventsLogic
+    public class EventsLogic
     {
-        public static void GetTicketTypesForEvent(string location, DateTime date, int eventId)
+        public void GetTicketTypesForEvent(string location, DateTime date, int eventId)
         {
             // Get ticket types for the selected event from the database
             List<TicketType> ticketTypes = DatabaseManager.GetInstance().GetTicketTypesForEvent(eventId);
@@ -16,7 +16,7 @@ namespace MusicApp.Events
             buyWindow.Show();
         }
 
-        public static void PurchaseTickets(TicketType selectedTicket, int quantity, string location, DateTime date)
+        public void PurchaseTickets(TicketType selectedTicket, int quantity, string location, DateTime date)
         {
             if (quantity <= 0)
             {
@@ -28,7 +28,7 @@ namespace MusicApp.Events
             paymentWindow.Show();
         }
 
-        public static void CompletePurchase(string eventLocation, DateTime eventDate, string ticketType, int quantity)
+        public void CompletePurchase(string eventLocation, DateTime eventDate, string ticketType, int quantity)
         {
             // TODO: Integrate payment method from the other group here
             CompletePurchase completePurchaseWindow = new CompletePurchase(eventLocation, eventDate, ticketType, quantity);

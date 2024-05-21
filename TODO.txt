@@ -3,13 +3,21 @@ TODO
 > better GUI + program window flow
 > reduce database manager complexity (not sure that is possible...)
 > asp .net database (???)
-> actually finish all functionalities
-   > improve chat
-   > make events work (ticket type problem)
+> actually finish all functionalities:
+   
+   HIGH PRIORITY
    > make player work (song paths problem)
    > implement a good profile
-   > add levenshtein automaton search engine
-   > actually use security module
-   > artist profiles
+   > integrate payment method into buy window
    > make search actually useful 
    	> adding songs to playlists should take you to the search window, and you add them from there
+   
+   MEDIUM PRIORITY
+   > actually use security module
+   > integrate payment method into buy window
+
+   LOW PRIORITY
+   > improve chat
+   > add levenshtein automaton search engine
+   > artist profiles
+  

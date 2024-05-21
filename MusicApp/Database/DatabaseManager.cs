@@ -374,7 +374,7 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "SELECT artistID, Name FROM ARTIST";
+                    string query = "SELECT artistID, artistName FROM ARTIST";
                     SqlCommand command = new SqlCommand(query, connection);
 
                     // Execute query and build list
@@ -383,7 +383,7 @@ namespace MusicApp.Database
                     {
                         artists.Add(new ArtistModel
                         {
-                            ArtistID = (int)reader["ArtistID"],
+                            ArtistID = (int)reader["artistID"],
                             Name = reader["artistName"].ToString()
                         });
                     }
@@ -410,7 +410,7 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = $"SELECT eventName, eventLocation, eventDate FROM [EVENT] WHERE artistID = {artistId}";
+                    string query = $"SELECT eventID, eventName, eventLocation, eventDate FROM [EVENT] WHERE artistID = {artistId}";
                     SqlCommand command = new SqlCommand(query, connection);
 
                     // Execute query and build list
@@ -419,6 +419,7 @@ namespace MusicApp.Database
                     {
                         events.Add(new EventModel
                         {
+                            EventID = (int)reader["eventID"],
                             Name = reader["eventName"].ToString(),
                             Location = reader["eventLocation"].ToString(),
                             DateTime = Convert.ToDateTime(reader["eventDate"])
@@ -447,15 +448,16 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "SELECT DISTINCT TicketType, Price FROM Tickets WHERE EventID = @EventID";
+                    string query = "SELECT DISTINCT ticketType, ticketPrice FROM TICKET WHERE eventID = @eventID";
                     SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@eventID", eventId);
 
                     // Execute query and build list
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        string type = reader["TicketType"].ToString();
-                        decimal price = (decimal)reader["Price"];
+                        string type = reader["ticketType"].ToString();
+                        decimal price = (decimal)reader["ticketPrice"];
                         ticketTypes.Add(new TicketType(type, price));
                     }
 

@@ -8,6 +8,7 @@ namespace MusicApp.Events
         private int quantity;
         private string eventLocation;
         private DateTime eventDate;
+        private EventsLogic eventsLogic;
 
         public Payment(string ticketType, int quantity, string eventLocation, DateTime eventDate)
         {
@@ -16,6 +17,7 @@ namespace MusicApp.Events
             this.quantity = quantity;
             this.eventLocation = eventLocation;
             this.eventDate = eventDate;
+            eventsLogic = new EventsLogic();
             LoadEventData();
         }
 
@@ -28,7 +30,7 @@ namespace MusicApp.Events
         private void ConfirmPurchaseButton_Click(object sender, RoutedEventArgs e)
         {
             // Open the CompletePurchase window with event details and close this one
-            EventsLogic.CompletePurchase(eventLocation, eventDate, ticketType, quantity);
+            eventsLogic.CompletePurchase(eventLocation, eventDate, ticketType, quantity);
             Close();
         }
     }
