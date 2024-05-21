@@ -78,28 +78,22 @@ VALUES (2, 'Throwback Jams', 'Classic hits from the past.', '2024-05-24T00:00:00
 
 --PLAYLISTSONG
 INSERT INTO PLAYLISTSONG (playlistID, songID)
-VALUES (10, 1);  -- Añade la canción con ID 1 a la playlist con ID 1
+VALUES (1, 1);  -- Añade la canción con ID 1 a la playlist con ID 1
 
 INSERT INTO PLAYLISTSONG (playlistID, songID)
-VALUES (6, 1);  
+VALUES (1, 2);  
 
 INSERT INTO PLAYLISTSONG (playlistID, songID)
-VALUES (7, 4);  
+VALUES (1, 3);  
 
 INSERT INTO PLAYLISTSONG (playlistID, songID)
-VALUES (8, 5);  
+VALUES (2, 4);  
 
 INSERT INTO PLAYLISTSONG (playlistID, songID)
-VALUES (9, 3);  
+VALUES (2, 5);  
 
 INSERT INTO PLAYLISTSONG (playlistID, songID)
-VALUES (10, 2);  
-
-INSERT INTO PLAYLISTSONG (playlistID, songID)
-VALUES (8, 3);  
-
-INSERT INTO PLAYLISTSONG (playlistID, songID)
-VALUES (6, 4);  
+VALUES (2, 1);  
 
 
 --FEEDBACK

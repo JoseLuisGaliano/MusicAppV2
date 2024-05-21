@@ -1,7 +1,7 @@
 TODO
 
 > better GUI + program window flow
-> make data types universal -> database manager reduced complexity
+> reduce database manager complexity
 > adjust database manager queries according to the final database model
 > asp .net database (???)
 > actually finish all functionalities
