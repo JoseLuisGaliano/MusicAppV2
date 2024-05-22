@@ -1,15 +1,12 @@
 TODO
 
-[MIGUEL] > better GUI + program window flow
+[JOSELU] > better GUI + program window flow
 > asp .net database (???)
 > actually finish all functionalities:
    
    HIGH PRIORITY
-   [NICO] > make player work (song paths problem)
-   [DAVIDE] > implement a good profile
+   [] > implement a good profile
    [MARINA] > integrate payment method into buy window
-   [JOSELU] > make search actually useful 
-   	        > adding songs to playlists should take you to the search window, and you add them from there
    
    MEDIUM PRIORITY
    > actually use security module
@@ -17,5 +14,5 @@ TODO
    LOW PRIORITY
    > improve chat
    > add levenshtein automaton search engine
-   > artist profiles
+   [DAVIDE] > artist profiles
   

@@ -79,13 +79,13 @@ namespace MusicApp.Playlists
 
         public bool AddSongsToPlaylist(int playlistID, List<Song> playlistSongs)
         {
-            var selectSongsWindow = new SelectSongsWindow();
             bool result = true;
 
-            // Displays the window and waits for the user to finish
-            if (selectSongsWindow.ShowDialog() == true)
+            // Displays the search window and waits for the user to finish
+            if (new Search.SearchWindow().ShowDialog() == true)
             {
-                var selectedSongs = selectSongsWindow.SelectedSongs;
+                // TODO: Go to search window, select songs from there
+                /*var selectedSongs = selectSongsWindow.SelectedSongs;
                 foreach (var song in selectedSongs)
                 {
                     playlistSongs.Add(song);
@@ -95,7 +95,7 @@ namespace MusicApp.Playlists
                     {
                         result = false;
                     }
-                }
+                }*/
             }
             return result;
         }

@@ -69,7 +69,8 @@ namespace MusicApp.Search
             List<SearchResultItemControl> matches = new List<SearchResultItemControl>();
             foreach (SearchResultItemControl item in searchItems)
             {
-                string itemTitle = item.title.Text;
+                // TODO
+                string itemTitle = item.title.Name;
 
                 // Allow for an edit distance of 2, without case sensitivity
                 LevenshteinDistance fuzzyMatchAlgorithm = new LevenshteinDistance();

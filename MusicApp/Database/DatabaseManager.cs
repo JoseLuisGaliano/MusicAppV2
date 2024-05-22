@@ -870,5 +870,209 @@ namespace MusicApp.Database
                 }
             }
         }
+
+        // PROFILE
+        public string GetBiography(int userId)
+        {
+            string biography = string.Empty;
+            string query = "SELECT biography FROM [USER] WHERE userID = @UserID";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@UserID", userId);
+                        biography = (string)command.ExecuteScalar() ?? string.Empty;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while retrieving biography from the database: " + ex.Message);
+            }
+
+            return biography;
+        }
+
+        public void SetBiography(int userId, string biography)
+        {
+            string query = "UPDATE [USER] SET biography = @Biography WHERE userID = @UserID";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Biography", biography);
+                        command.Parameters.AddWithValue("@UserID", userId);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while updating biography in the database: " + ex.Message);
+            }
+        }
+
+        public List<string> GetSavedSongs(int userId)
+        {
+            List<string> savedSongs = new List<string>();
+            string query = "SELECT songTitle FROM SONG INNER JOIN PLAYLISTSONG ON SONG.songID = PLAYLISTSONG.songID WHERE PLAYLISTSONG.playlistID = @UserID";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@UserID", userId);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                savedSongs.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while retrieving saved songs from the database: " + ex.Message);
+            }
+
+            return savedSongs;
+        }
+
+        public void AddSavedSong(int userId, string songTitle)
+        {
+            string query = "INSERT INTO PLAYLISTSONG (playlistID, songID) VALUES (@PlaylistID, (SELECT songID FROM SONG WHERE songTitle = @SongTitle))";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@PlaylistID", userId); // Assuming there's a user-specific playlist
+                        command.Parameters.AddWithValue("@SongTitle", songTitle);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while adding saved song to the database: " + ex.Message);
+            }
+        }
+
+        public void RemoveSavedSong(int userId, string songTitle)
+        {
+            string query = "DELETE FROM PLAYLISTSONG WHERE playlistID = @PlaylistID AND songID = (SELECT songID FROM SONG WHERE songTitle = @SongTitle)";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@PlaylistID", userId); // Assuming there's a user-specific playlist
+                        command.Parameters.AddWithValue("@SongTitle", songTitle);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while removing saved song from the database: " + ex.Message);
+            }
+        }
+
+        public List<string> GetPlaylists(int userId)
+        {
+            List<string> playlists = new List<string>();
+            string query = "SELECT playlistName FROM PLAYLIST WHERE ownerID = @UserID";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@UserID", userId);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                playlists.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while retrieving playlists from the database: " + ex.Message);
+            }
+
+            return playlists;
+        }
+
+        public void AddPlaylist(int userId, string playlistName)
+        {
+            string query = "INSERT INTO PLAYLIST (ownerID, playlistName, playlistCreationDate) VALUES (@OwnerID, @PlaylistName, @CreationDate)";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@OwnerID", userId);
+                        command.Parameters.AddWithValue("@PlaylistName", playlistName);
+                        command.Parameters.AddWithValue("@CreationDate", DateTime.Now);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while adding playlist to the database: " + ex.Message);
+            }
+        }
+
+        public void RemovePlaylist(int userId, string playlistName)
+        {
+            string query = "DELETE FROM PLAYLIST WHERE ownerID = @OwnerID AND playlistName = @PlaylistName";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@OwnerID", userId);
+                        command.Parameters.AddWithValue("@PlaylistName", playlistName);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while removing playlist from the database: " + ex.Message);
+            }
+        }
     }
 }

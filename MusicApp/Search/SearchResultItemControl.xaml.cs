@@ -44,7 +44,7 @@ namespace MusicApp.Search
         public void SetTitle(string title)
         {
             // Set the title text
-            this.title.Text = title;
+            this.title.Name = title;
         }
 
         public void SetSubTitle1(string subTitle1)
@@ -63,6 +63,11 @@ namespace MusicApp.Search
         {
             // Set the third subtitle text
             this.subTitle3.Text = subTitle3;
+        }
+
+        // TODO: Select songs to put them in a playlist
+        public void TitleButton_Click()
+        {
         }
     }
 }

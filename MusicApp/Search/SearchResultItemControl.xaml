@@ -10,7 +10,14 @@
         <Image x:Name="image" HorizontalAlignment="Left" Width="80" Height="80" Margin="15" />
 
         <StackPanel VerticalAlignment="Center" Margin="100,0,10,0">
-            <TextBlock x:Name="title" FontWeight="Bold" FontSize="18" Foreground="DarkViolet" Margin="0,0,0,5" Width="173"/>
+            <!--
+            <Button x:Name="title" Click="TitleButton_Click" 
+                    Background="Transparent" BorderBrush="Transparent" 
+                    Margin="0,0,0,5" Width="173">
+                <TextBlock x:Name="buttonTitle" FontWeight="Bold" FontSize="18" Foreground="DarkViolet" />
+            </Button>
+            -->
+            <TextBlock x:Name="title" FontWeight="Bold" FontSize="18" Foreground="DarkViolet" />
             <TextBlock x:Name="subTitle1" FontSize="14" Foreground="White" Margin="0,0,0,5" />
             <TextBlock x:Name="subTitle2" FontSize="14" Foreground="White" Margin="0,0,0,5" />
             <TextBlock x:Name="subTitle3" FontSize="14" Foreground="White" Margin="0,0,0,5" />

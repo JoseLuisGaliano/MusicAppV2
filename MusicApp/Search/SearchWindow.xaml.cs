@@ -1,15 +1,14 @@
 ﻿using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Controls;
+using MusicApp.DataTypes;
 
 namespace MusicApp.Search
 {
-    /// <summary>
-    /// Lógica de interacción para SearchWindow.xaml
-    /// </summary>
     public partial class SearchWindow : Window
     {
         private SearchLogic searchLogic;
+        public List<Song> SelectedSongs { get; }
 
         public SearchWindow()
         {
