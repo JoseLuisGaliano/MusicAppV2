@@ -7,6 +7,7 @@ TODO
    HIGH PRIORITY
    [] > implement a good profile
    [MARINA] > integrate payment method into buy window
+   > playing from a playlist should take you to the player
    
    MEDIUM PRIORITY
    > actually use security module

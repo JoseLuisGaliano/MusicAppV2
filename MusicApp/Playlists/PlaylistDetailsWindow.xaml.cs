@@ -16,6 +16,7 @@ namespace MusicApp.Playlists
             LoadSongsFromDatabase();
         }
 
+        // TODO
         private void PlayButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             QueueWindow queueWindow = new QueueWindow();

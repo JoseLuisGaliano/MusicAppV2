@@ -46,5 +46,12 @@ namespace MusicApp
             playlistListWindow.Show();
             Close();
         }
+
+        private void GoToPlayer(object sender, RoutedEventArgs e)
+        {
+            Player.PlayerWindow playerWindow = new Player.PlayerWindow();
+            playerWindow.Show();
+            Close();
+        }
     }
 }
