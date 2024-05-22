@@ -17,7 +17,7 @@
                 <TextBlock x:Name="buttonTitle" FontWeight="Bold" FontSize="18" Foreground="DarkViolet" />
             </Button>
             -->
-            <TextBlock x:Name="title" FontWeight="Bold" FontSize="18" Foreground="DarkViolet" />
+            <TextBlock x:Name="title" FontWeight="Bold" FontSize="18" Foreground="DarkViolet" Margin="0,0,0,5" />
             <TextBlock x:Name="subTitle1" FontSize="14" Foreground="White" Margin="0,0,0,5" />
             <TextBlock x:Name="subTitle2" FontSize="14" Foreground="White" Margin="0,0,0,5" />
             <TextBlock x:Name="subTitle3" FontSize="14" Foreground="White" Margin="0,0,0,5" />

@@ -4,21 +4,29 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using MusicApp;
+
 namespace MusicApp.Profile
 {
     public partial class ProfileWindow : Window
     {
         private Profile userProfile;
+
         public ProfileWindow()
         {
             InitializeComponent();
 
-            // Create a new profile with an ID of 1
-            userProfile = new Profile(1);
+            // Create a new profile with the ID of the user of the sesion
+            userProfile = new Profile(Database.DatabaseManager.GetInstance().ResolveUserID());
+
             // Set the biography textbox text
             txtBiography.Text = userProfile.GetBiography();
+
+            // Set the email textbox text
+            txtEmail.Text = userProfile.GetEmail();
+
             // Set the saved songs listbox items source
             lstSavedSongs.ItemsSource = userProfile.GetSavedSongs();
+
             // Set the playlists listbox items source
             lstPlaylists.ItemsSource = userProfile.GetPlaylists();
         }
@@ -30,12 +38,21 @@ namespace MusicApp.Profile
             MessageBox.Show("Biography saved!");
         }
 
+        private void SaveEmail_Click(object sender, RoutedEventArgs e)
+        {
+            // Save the email entered in the textbox
+            userProfile.SetEmail(txtEmail.Text);
+            MessageBox.Show("Email saved!");
+        }
+
         private void AddSavedSong_Click(object sender, RoutedEventArgs e)
         {
             // Add the new saved song entered in the textbox
             userProfile.AddSavedSong(txtNewSavedSong.Text);
+
             // Refresh the saved songs listbox
             lstSavedSongs.Items.Refresh();
+
             // Clear the new saved song textbox
             txtNewSavedSong.Clear();
         }
@@ -55,8 +72,10 @@ namespace MusicApp.Profile
         {
             // Add the new playlist in the textbox
             userProfile.AddPlaylist(txtNewPlaylist.Text);
+
             // Refresh the playlists listbox
             lstPlaylists.Items.Refresh();
+
             // Clear the new playlist textbox
             txtNewPlaylist.Clear();
         }
@@ -74,7 +93,7 @@ namespace MusicApp.Profile
 
         private void ChangeProfilePicture_Click(object sender, RoutedEventArgs e)
         {
-            // changing profile picture
+            // Changing profile picture
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files (*.jpg; *.jpeg; *.png; *.bmp; *.gif)|*.jpg; *.jpeg; *.png; *.bmp; *.gif";
             if (openFileDialog.ShowDialog() == true)

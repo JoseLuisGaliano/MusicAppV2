@@ -36,9 +36,19 @@ namespace MusicApp
             }
         }
 
+        // API NOT WORKING YET
+        /*
+        public async Task<bool> SignIn(string username, string password)
+        {
+            bool success = await authModule.RegisterUser(username, password);
+            return success;
+        }
+        */
+
         public bool SignIn(string username, string password)
         {
-            return authModule.RegisterUser(username, password);
+            bool success = authModule.RegisterUser(username, password);
+            return success;
         }
     }
 }

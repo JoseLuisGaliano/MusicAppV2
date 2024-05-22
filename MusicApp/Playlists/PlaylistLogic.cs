@@ -54,6 +54,24 @@ namespace MusicApp.Playlists
             }
         }
 
+        public bool DeletePlaylist(Button button)
+        {
+            if (button != null)
+            {
+                var playlist = button.DataContext as Playlist;
+                if (playlist != null)
+                {
+                    return DatabaseManager.GetInstance().DeletePlaylist(playlist.Name);
+                }
+                else
+                {
+                    MessageBox.Show("Please select a playlist to delete");
+                    return false;
+                }
+            }
+            return false;
+        }
+
         public bool AddPlaylist(string name, string description)
         {
             // Verify the input fields are not empty

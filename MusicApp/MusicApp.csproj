@@ -20,14 +20,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Search\" />
+		<Folder Include="Database\Models\" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="Profile\default.jpg" />
 		<None Remove="Search\images\artist_photo.png" />
 		<None Remove="Search\images\default.jpg" />
+		<None Remove="Search\images\drake.jpg" />
 		<None Remove="Search\images\profile_pic.jpg" />
 		<None Remove="Search\images\taylor.jpg" />
+		<None Remove="Search\images\taylor_swift.jpg" />
+		<None Remove="Search\images\withteeth.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -40,10 +44,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="Search\images\artist_photo.png" />
+		<Resource Include="Profile\default.jpg">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
 		<Resource Include="Search\images\default.jpg" />
-		<Resource Include="Search\images\profile_pic.jpg" />
-		<Resource Include="Search\images\taylor.jpg" />
+		<Resource Include="Search\images\drake.jpg">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Search\images\taylor_swift.jpg" />
+		<Resource Include="Search\images\withteeth.png" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -17,6 +17,7 @@ namespace MusicApp.Playlists
             string playlistName = txtPlaylistName.Text;
             string playlistDescription = txtDescription.Text;
             playlistLogic.AddPlaylist(playlistName, playlistDescription);
+            Close();
         }
     }
 }

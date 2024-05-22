@@ -27,18 +27,40 @@ namespace MusicApp
             {
                 MessageBox.Show("Error while logging in. Please try again", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            MainWindow menu = new MainWindow();
-            menu.Show();
-            Close();
+            else
+            {
+                MainWindow menu = new MainWindow();
+                menu.Show();
+                Close();
+            }
         }
+
+        // API NOT WORKING YET
+        /*
+        public async void SignInButtonClick(object sender, RoutedEventArgs e)
+        {
+            string username = UsernameBox.Text;
+            string password = PasswordBox.Password;
+
+            bool signInSuccess = await loginLogic.SignIn(username, password);
+            if (signInSuccess)
+            {
+                MessageBox.Show("Sign In successful!", "Sign In", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Error while signing in. Please try again", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        */
 
         public void SignInButtonClick(object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text;
             string password = PasswordBox.Password;
 
-            if (loginLogic.SignIn(username, password))
+            bool signInSuccess = loginLogic.SignIn(username, password);
+            if (signInSuccess)
             {
                 MessageBox.Show("Sign In successful!", "Sign In", MessageBoxButton.OK, MessageBoxImage.Information);
             }

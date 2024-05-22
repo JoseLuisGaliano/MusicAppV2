@@ -4,15 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Background="#121212" FontFamily="Helvetica Neue, Helvetica, Arial, sans-serif">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-            <Button Content="Go to Search" Width="120" Height="40"  Click="GoToSearch"/>
-            <Button Content="Go to Chat" Width="120" Height="40" Click="GoToChat"/>
-            <Button Content="Go to Profile" Width="120" Height="40" Click="GoToProfile"/>
-            <Button Content="Go to Events" Width="120" Height="40" Click="GoToEvents"/>
-            <Button Content="Go to Playlist" Width="120" Height="40" Click="GoToPlaylist"/>
-            <Button Content="Go to Player" Width="120" Height="40" Click="GoToPlayer"/>
+            <Button Content="Go to Search" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
+                            HorizontalAlignment="Stretch"  Click="GoToSearch"/>
+            <Button Content="Go to Chat" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
+                            HorizontalAlignment="Stretch" Click="GoToChat"/>
+            <Button Content="Go to Profile" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
+                            HorizontalAlignment="Stretch" Click="GoToProfile"/>
+            <Button Content="Go to Events" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
+                            HorizontalAlignment="Stretch" Click="GoToEvents"/>
+            <Button Content="Go to Playlist" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
+                            HorizontalAlignment="Stretch" Click="GoToPlaylist"/>
+            <Button Content="Go to Player" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
+                            HorizontalAlignment="Stretch" Click="GoToPlayer"/>
 
         </StackPanel>
     </Grid>

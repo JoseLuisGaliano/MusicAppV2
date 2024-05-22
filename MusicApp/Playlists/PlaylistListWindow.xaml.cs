@@ -41,16 +41,16 @@ namespace MusicApp.Playlists
             // Create window to add playlists
             AddPlaylistWindow addPlaylistWindow = new AddPlaylistWindow();
             addPlaylistWindow.Show();
-            Close();
         }
 
         private void DeletePlaylistButton_Click(object sender, RoutedEventArgs eventArgs)
         {
-            var selectedPlaylistName = PlaylistResultsListBox.SelectedItem as string;
-            bool deleted = playlistLogic.DeletePlaylist(selectedPlaylistName);
+            var button = sender as Button;
+            bool deleted = playlistLogic.DeletePlaylist(button);
             if (deleted)
             {
                 LoadPlaylistsFromDatabase(); // Refresh playlist list
+                MessageBox.Show("Playlist deleted!");
             }
         }
 

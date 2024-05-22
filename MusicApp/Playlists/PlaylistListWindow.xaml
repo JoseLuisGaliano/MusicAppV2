@@ -25,7 +25,6 @@
         <!-- Botones del encabezado -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0">
             <Button Content="Add Playlist" Click="AddPlaylistButton_Click" Background="#FF1DB954" Foreground="White" Padding="10,5" Margin="5"/>
-            <Button Content="Delete Playlist" Click="DeletePlaylistButton_Click" Background="#FF1DB954" Foreground="White" Padding="10,5" Margin="5"/>
         </StackPanel>
 
 
@@ -39,6 +38,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <!-- Playlist Information -->
@@ -49,7 +49,12 @@
 
                             <!-- Botón de detalles de Playlist -->
                             <Button Grid.Column="1" Content="Open" CommandParameter="{Binding PlaylistID}"
-                            Click="DetailsButton_Click" Margin="10"
+                            Click="DetailsButton_Click" Margin="15"
+                            Background="#1DB954" Foreground="White" BorderThickness="0"/>
+
+                            <!-- Botón de borrar la Playlist -->
+                            <Button Grid.Column="2" Content="Delete" CommandParameter="{Binding PlaylistID}"
+                            Click="DeletePlaylistButton_Click" Margin="15"
                             Background="#1DB954" Foreground="White" BorderThickness="0"/>
                         </Grid>
                     </Border>

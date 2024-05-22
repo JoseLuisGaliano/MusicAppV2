@@ -14,11 +14,23 @@ namespace MusicApp.Authentication
         {
         }
 
+        // API NOT WORKING YET
+        /*
+        public async Task<bool> RegisterUser(string username, string password)
+        {
+            string salt = GenerateSalt();
+            string hashedPassword = HashPassword(password, salt);
+            bool success = await DatabaseManagerAPI.GetInstance().RegisterUser(username, hashedPassword, salt);
+            return success;
+        }
+        */
+
         public bool RegisterUser(string username, string password)
         {
             string salt = GenerateSalt();
             string hashedPassword = HashPassword(password, salt);
-            return DatabaseManager.GetInstance().RegisterUser(username, hashedPassword, salt);
+            bool success = DatabaseManager.GetInstance().RegisterUser(username, hashedPassword, salt);
+            return success;
         }
 
         public bool AuthenticateUser(string username, string password)

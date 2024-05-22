@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using MusicApp.Database;
 using MusicApp.DataTypes;
+using MusicApp.Player;
 
 namespace MusicApp.Playlists
 {
@@ -16,12 +17,10 @@ namespace MusicApp.Playlists
             LoadSongsFromDatabase();
         }
 
-        // TODO
         private void PlayButton_Click(object sender, RoutedEventArgs eventArgs)
         {
-            QueueWindow queueWindow = new QueueWindow();
-            queueWindow.Show();
-            Close();
+            // This should take you to the player, having loaded instead of a local folder this single
+            // song.
         }
         private void EditPlaylistButton_Click(object sender, RoutedEventArgs eventArgs)
         {

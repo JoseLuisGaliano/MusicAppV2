@@ -1,19 +1,6 @@
 TODO
 
-[JOSELU] > better GUI + program window flow
-> asp .net database (???)
-> actually finish all functionalities:
-   
-   HIGH PRIORITY
-   [] > implement a good profile
-   [MARINA] > integrate payment method into buy window
-   > playing from a playlist should take you to the player
-   
-   MEDIUM PRIORITY
-   > actually use security module
-
-   LOW PRIORITY
-   > improve chat
-   > add levenshtein automaton search engine
-   [DAVIDE] > artist profiles
+[NICO] > Menu GUI
+[JOSELU] > Window Flow
+[] > Web API
   

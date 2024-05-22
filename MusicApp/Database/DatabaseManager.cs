@@ -30,7 +30,7 @@ namespace MusicApp.Database
         }
 
         // AUTHENTICATION
-        private int ResolveUserID()
+        public int ResolveUserID()
         {
             string username = Sesion.GetInstance().Username;
             int id = -1;
@@ -42,7 +42,7 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "SELECT userID FROM [USER] WHERE username = " + username + ";";
+                    string query = "SELECT userID FROM [USER] WHERE username = '" + username + "';";
 
                     // Execute query
                     SqlCommand command = new SqlCommand(query, connection);
@@ -248,7 +248,7 @@ namespace MusicApp.Database
             return searchItems;
         }
 
-        public List<Search.SearchResultItemControl> LoadSongSearchItems(List<Search.SearchResultItemControl> searchItems, string genreFilter = "")
+        public List<Search.SearchResultItemControl> LoadSongSearchItems(List<Search.SearchResultItemControl> searchItems, string genreFilter = " ")
         {
             try
             {
@@ -289,15 +289,11 @@ namespace MusicApp.Database
                         // Since we know the result of the select is a single element (one row and one column) we can use ExecuteScalar() to get that value
                         string subtitle1 = command1.ExecuteScalar().ToString();
 
-                        string getDateQuery = "SELECT albumReleaseDate FROM ALBUM WHERE albumID = (SELECT albumID FROM SONG WHERE songTitle = '" + title + "');";
-                        SqlCommand command2 = new SqlCommand(getDateQuery, connection);
+                        string getAlbumQuery = "SELECT albumTitle FROM ALBUM WHERE albumID = (SELECT albumID FROM SONG WHERE songTitle = '" + title + "');";
+                        SqlCommand command2 = new SqlCommand(getAlbumQuery, connection);
                         string subtitle2 = command2.ExecuteScalar().ToString();
 
-                        string getGenreQuery = "SELECT albumGenre FROM ALBUM WHERE albumID = (SELECT albumID FROM SONG WHERE songTitle = '" + title + "');";
-                        SqlCommand command3 = new SqlCommand(getGenreQuery, connection);
-                        string subtitle3 = command3.ExecuteScalar().ToString();
-
-                        searchItems.Add(searchLogic.AddSearchResult(image, title, subtitle1, subtitle2, subtitle3));
+                        searchItems.Add(searchLogic.AddSearchResult(image, title, subtitle1, subtitle2));
                     }
 
                     connection.Close();
@@ -341,7 +337,7 @@ namespace MusicApp.Database
                     {
                         string image = row["albumPicture"].ToString();
                         string title = row["albumTitle"].ToString();
-                        string subtitle2 = row["albumReleaseDate"].ToString();
+                        string subtitle2 = row["albumReleaseDate"].ToString().Substring(6, 4);
                         string subtitle3 = row["albumGenre"].ToString();
 
                         // Resolve the database references (foreign keys) to properly pass the data to AddSearchResult()
@@ -568,7 +564,7 @@ namespace MusicApp.Database
                         playlists.Add(new Playlist
                         {
                             PlaylistID = Convert.ToInt32(reader["playlistID"]),
-                            Name = reader["Name"].ToString(),
+                            Name = reader["playlistName"].ToString(),
                             Description = reader.IsDBNull(reader.GetOrdinal("playlistDescription")) ? string.Empty : reader["playlistDescription"].ToString(),
                             CreationDate = Convert.ToDateTime(reader["playlistCreationDate"]),
                             IsLiked = false,
@@ -627,7 +623,7 @@ namespace MusicApp.Database
                     connection.Open();
 
                     // Build query
-                    string query = "INSERT INTO Playlists (ownerID, playlistName, playlistDescription, playlistCreationDate) VALUES (@ownerID, @playlistName, @playlistDescription, @playlistCreationDate)";
+                    string query = "INSERT INTO PLAYLIST (ownerID, playlistName, playlistDescription, playlistCreationDate) VALUES (@ownerID, @playlistName, @playlistDescription, @playlistCreationDate)";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@ownerID", ResolveUserID());
                     command.Parameters.AddWithValue("@playlistName", name);
@@ -876,7 +872,6 @@ namespace MusicApp.Database
         {
             string biography = string.Empty;
             string query = "SELECT biography FROM [USER] WHERE userID = @UserID";
-
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
@@ -919,7 +914,52 @@ namespace MusicApp.Database
                 Console.WriteLine("Error while updating biography in the database: " + ex.Message);
             }
         }
+        public string GetEmail(int userId)
+        {
+            string email = string.Empty;
+            string query = "SELECT email FROM [USER] WHERE userID = @UserID";
 
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@UserID", userId);
+                        email = (string)command.ExecuteScalar() ?? string.Empty;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while retrieving email from the database: " + ex.Message);
+            }
+
+            return email;
+        }
+        public void SetEmail(int userId, string email)
+        {
+            string query = "UPDATE [USER] SET email = @Email WHERE userID = @UserID";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Email", email);
+                        command.Parameters.AddWithValue("@UserID", userId);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while updating email in the database: " + ex.Message);
+            }
+        }
         public List<string> GetSavedSongs(int userId)
         {
             List<string> savedSongs = new List<string>();

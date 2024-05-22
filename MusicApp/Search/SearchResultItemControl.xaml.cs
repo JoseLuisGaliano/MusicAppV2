@@ -44,7 +44,7 @@ namespace MusicApp.Search
         public void SetTitle(string title)
         {
             // Set the title text
-            this.title.Name = title;
+            this.title.Text = title;
         }
 
         public void SetSubTitle1(string subTitle1)
