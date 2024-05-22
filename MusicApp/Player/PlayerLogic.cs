@@ -1,8 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Media;
-using MusicApp.Database;
-using MusicApp.DataTypes;
 
 namespace MusicApp.Player
 {
@@ -10,8 +10,13 @@ namespace MusicApp.Player
     {
         private MediaPlayer mediaPlayer = new MediaPlayer();
         private List<string> playlist = new List<string>(); // List of the file paths of the songs in the playlist
-        private int currentSongIndex = 1;
+        private int currentSongIndex = 0;
         private bool isCurrentlyPlaying = false;
+
+        internal void LoadPlaylist(List<string> files)
+        {
+            playlist = files;
+        }
 
         internal void StartReproduction(string songPath)
         {
@@ -33,17 +38,12 @@ namespace MusicApp.Player
                 mediaPlayer.Open(new Uri(filePath, UriKind.Absolute));
                 mediaPlayer.Play();
                 isCurrentlyPlaying = true;
+                currentSongIndex = playlist.IndexOf(filePath);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error playing song: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        // TODO: Integrate loading playlists into the player
-        private void InitializePlaylist()
-        {
-            playlist = DatabaseManager.GetInstance().LoadPlaylist();
         }
 
         internal void GoToPreviousSong()
@@ -98,32 +98,18 @@ namespace MusicApp.Player
             LoadSong(playlist[currentSongIndex]);
         }
 
-        internal void DownloadSong(Song selectedSong)
+        internal string GetCurrentSong()
         {
-            if (selectedSong != null)
+            if (currentSongIndex >= 0 && currentSongIndex < playlist.Count)
             {
-                // Create text file with song data
-                string songData = $"Title: {selectedSong.SongTitle}\nArtist: {selectedSong.ArtistName}\n";
-
-                // Path to which the song file will be saved
-                string filePath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{selectedSong.SongTitle}.txt";
-
-                try
-                {
-                    // Write song data into text file
-                    File.WriteAllText(filePath, songData);
-
-                    MessageBox.Show("Canción descargada exitosamente.", "Descarga Exitosa", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al descargar la canción: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                return playlist[currentSongIndex];
             }
-            else
-            {
-                MessageBox.Show("Seleccione una canción de la lista antes de descargar.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            return null;
+        }
+
+        internal int GetCurrentSongIndex()
+        {
+            return currentSongIndex;
         }
     }
 }
