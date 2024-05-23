@@ -105,5 +105,18 @@ namespace MusicApp.Profile
                 imgProfilePicture.Source = bitmap;
             }
         }
+
+        private void GoToPayment_Click(object sender, RoutedEventArgs e)
+        {
+            Payment.PaymentPlatform paymentWindow = new Payment.PaymentPlatform();
+            paymentWindow.Show();
+        }
+
+        private void GoBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow menu = new MainWindow();
+            menu.Show();
+            Close();
+        }
     }
 }

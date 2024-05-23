@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MusicApp.Database.Models;
 
 namespace MusicApp.Playlists
 {
@@ -17,6 +18,10 @@ namespace MusicApp.Playlists
             string playlistName = txtPlaylistName.Text;
             string playlistDescription = txtDescription.Text;
             playlistLogic.AddPlaylist(playlistName, playlistDescription);
+
+            // Go back to playlist list
+            PlaylistListWindow playlistList = new PlaylistListWindow();
+            playlistList.Show();
             Close();
         }
     }

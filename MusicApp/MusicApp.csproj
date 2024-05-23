@@ -20,18 +20,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Database\Models\" />
+	  <Compile Include="Payment\Cancel_Subscription.xaml.cs" />
+	  <Compile Include="Payment\ContactSupport.xaml.cs" />
+	  <Compile Include="Payment\ManageSubscription.xaml.cs" />
+	  <Compile Include="Payment\PaymentPlatform.xaml.cs" />
+	  <Compile Include="Payment\Payment_Management.xaml.cs" />
+	  <Compile Include="Payment\SubscriptionOption.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Profile\default.jpg" />
-		<None Remove="Search\images\artist_photo.png" />
-		<None Remove="Search\images\default.jpg" />
-		<None Remove="Search\images\drake.jpg" />
-		<None Remove="Search\images\profile_pic.jpg" />
-		<None Remove="Search\images\taylor.jpg" />
-		<None Remove="Search\images\taylor_swift.jpg" />
-		<None Remove="Search\images\withteeth.png" />
+		<Folder Include="Database\Models\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,19 +42,38 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="Profile\default.jpg">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
 		<Resource Include="Search\images\default.jpg" />
-		<Resource Include="Search\images\drake.jpg">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
+		<Resource Include="Search\images\drake.jpg" />
 		<Resource Include="Search\images\taylor_swift.jpg" />
 		<Resource Include="Search\images\withteeth.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Stripe.net" Version="44.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Include="Payment\Cancel_Subscription.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="Payment\ContactSupport.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="Payment\ManageSubscription.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="Payment\PaymentPlatform.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="Payment\Payment_Management.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Payment\Images\email_icon.png" />
+		<Resource Include="Payment\Images\phone_icon.png" />
+		<Resource Include="Payment\Images\profile_pic.jpg" />
 	</ItemGroup>
 
 </Project>

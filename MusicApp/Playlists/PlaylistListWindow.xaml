@@ -2,9 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Playlist List" Height="450" Width="800"
-        Background="#FF121212">
+        Background="#FF121212"
+        WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -25,6 +27,7 @@
         <!-- Botones del encabezado -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0">
             <Button Content="Add Playlist" Click="AddPlaylistButton_Click" Background="#FF1DB954" Foreground="White" Padding="10,5" Margin="5"/>
+            <Button Content="Go Back" Click="GoBackButton_Click" Background="#FF1DB954" Foreground="White" Padding="10,5" Margin="5"/>
         </StackPanel>
 
 

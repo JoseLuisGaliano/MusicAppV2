@@ -23,7 +23,6 @@ namespace MusicApp
         {
             Chat.MVVM.View.ChatWindow chatWindow = new Chat.MVVM.View.ChatWindow();
             chatWindow.Show();
-            Close();
         }
 
         private void GoToProfile(object sender, RoutedEventArgs e)
@@ -51,7 +50,6 @@ namespace MusicApp
         {
             Player.PlayerWindow playerWindow = new Player.PlayerWindow();
             playerWindow.Show();
-            Close();
         }
     }
 }

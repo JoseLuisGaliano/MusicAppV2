@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Forms;
 using MusicApp.Database;
 using MusicApp.DataTypes;
 
@@ -20,7 +21,7 @@ namespace MusicApp.Events
         {
             if (quantity <= 0)
             {
-                MessageBox.Show("Please enter a valid number of tickets.");
+                // MessageBox.Show("Please enter a valid number of tickets.");
                 return;
             }
 

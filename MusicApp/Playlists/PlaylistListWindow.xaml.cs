@@ -41,6 +41,7 @@ namespace MusicApp.Playlists
             // Create window to add playlists
             AddPlaylistWindow addPlaylistWindow = new AddPlaylistWindow();
             addPlaylistWindow.Show();
+            Close();
         }
 
         private void DeletePlaylistButton_Click(object sender, RoutedEventArgs eventArgs)
@@ -58,6 +59,13 @@ namespace MusicApp.Playlists
         {
             var button = sender as Button;
             playlistLogic.ShowDetails(button);
+        }
+
+        private void GoBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow menu = new MainWindow();
+            menu.Show();
+            Close();
         }
     }
 }

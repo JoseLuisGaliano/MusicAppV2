@@ -58,5 +58,12 @@ namespace MusicApp.Search
                 }
             }
         }
+
+        private void GoBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow menu = new MainWindow();
+            menu.Show();
+            Close();
+        }
     }
 }

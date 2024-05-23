@@ -50,13 +50,18 @@ namespace MusicApp.Events
             {
                 // Get ticket types and go to ticket window
                 eventsLogic.GetTicketTypesForEvent(selectedEvent.Location, selectedEvent.DateTime, selectedEvent.EventID);
-                // Close events window
-                Close();
             }
             else
             {
                 MessageBox.Show("Please select an event first.");
             }
+        }
+
+        private void GoBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow menu = new MainWindow();
+            menu.Show();
+            Close();
         }
     }
 }

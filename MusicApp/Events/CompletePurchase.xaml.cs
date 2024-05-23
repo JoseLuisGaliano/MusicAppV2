@@ -19,11 +19,7 @@ namespace MusicApp.Events
 
         private void BackToEventsButton_Click(object sender, RoutedEventArgs eventArgs)
         {
-            // Open/connect the Event window
-            Event eventWindow = new Event();
-            eventWindow.Show();
-
-            // Close the CompletePurchase window
+            // The events window is already open
             Close();
         }
     }
