@@ -1,15 +1,15 @@
 ﻿namespace MusicApp.Database.Models
 {
-    public class User
+    internal class User
     {
-        public int UserID { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public DateTime DateJoined { get; set; }
-        public bool IsActive { get; set; }
-        public string ProfilePicture { get; set; }
-        public string SubscriptionPlan { get; set; }
-        public string HashedPassword { get; set; }
-        public string Salt { get; set; }
+        internal int UserID { get; set; }
+        internal string Username { get; set; }
+        internal string Email { get; set; }
+        internal DateTime DateJoined { get; set; }
+        internal bool IsActive { get; set; }
+        internal string ProfilePicture { get; set; }
+        internal string SubscriptionPlan { get; set; }
+        internal string HashedPassword { get; set; }
+        internal string Salt { get; set; }
     }
 }

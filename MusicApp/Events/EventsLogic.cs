@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Forms;
-using MusicApp.Database;
+﻿using MusicApp.Database;
 using MusicApp.DataTypes;
 
 namespace MusicApp.Events

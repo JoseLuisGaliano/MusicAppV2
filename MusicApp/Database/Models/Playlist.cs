@@ -1,11 +1,11 @@
 ﻿namespace MusicApp.Database.Models
 {
-    public class Playlist
+    internal class Playlist
     {
-        public int PlaylistID { get; set; }
-        public int OwnerID { get; set; }
-        public string PlaylistName { get; set; }
-        public string PlaylistDescription { get; set; }
-        public DateTime PlaylistCreationDate { get; set; }
+        internal int PlaylistID { get; set; }
+        internal int OwnerID { get; set; }
+        internal string PlaylistName { get; set; }
+        internal string PlaylistDescription { get; set; }
+        internal DateTime PlaylistCreationDate { get; set; }
     }
 }

@@ -1,12 +1,12 @@
 ﻿namespace MusicApp.Database.Models
 {
-    public class Feedback
+    internal class Feedback
     {
-        public int FeedbackID { get; set; }
-        public int UserID { get; set; }
-        public int SongID { get; set; }
-        public int Rating { get; set; }
-        public string Comment { get; set; }
-        public DateTime FeedbackDate { get; set; }
+        internal int FeedbackID { get; set; }
+        internal int UserID { get; set; }
+        internal int SongID { get; set; }
+        internal int Rating { get; set; }
+        internal string Comment { get; set; }
+        internal DateTime FeedbackDate { get; set; }
     }
 }

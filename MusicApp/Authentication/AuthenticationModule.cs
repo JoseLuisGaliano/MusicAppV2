@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using MusicApp.Database;
 
 namespace MusicApp.Authentication
@@ -14,7 +9,7 @@ namespace MusicApp.Authentication
         {
         }
 
-        // API NOT WORKING YET
+        // API NOT WORKING
         /*
         public async Task<bool> RegisterUser(string username, string password)
         {
@@ -22,8 +17,7 @@ namespace MusicApp.Authentication
             string hashedPassword = HashPassword(password, salt);
             bool success = await DatabaseManagerAPI.GetInstance().RegisterUser(username, hashedPassword, salt);
             return success;
-        }
-        */
+        }*/
 
         public bool RegisterUser(string username, string password)
         {

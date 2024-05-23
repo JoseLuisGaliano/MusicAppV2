@@ -1,8 +1,8 @@
 ﻿namespace MusicApp.Database.Models
 {
-    public class PlaylistSong
+    internal class PlaylistSong
     {
-        public int PlaylistID { get; set; }
-        public int SongID { get; set; }
+        internal int PlaylistID { get; set; }
+        internal int SongID { get; set; }
     }
 }

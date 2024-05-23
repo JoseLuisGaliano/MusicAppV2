@@ -7,21 +7,37 @@
         Title="MainWindow" Height="450" Width="800"
         Background="#121212" FontFamily="Helvetica Neue, Helvetica, Arial, sans-serif"
         WindowState="Maximized">
-    <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-            <Button Content="Go to Search" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
-                            HorizontalAlignment="Stretch"  Click="GoToSearch"/>
-            <Button Content="Go to Chat" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
-                            HorizontalAlignment="Stretch" Click="GoToChat"/>
-            <Button Content="Go to Profile" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
-                            HorizontalAlignment="Stretch" Click="GoToProfile"/>
-            <Button Content="Go to Events" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
-                            HorizontalAlignment="Stretch" Click="GoToEvents"/>
-            <Button Content="Go to Playlist" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
-                            HorizontalAlignment="Stretch" Click="GoToPlaylist"/>
-            <Button Content="Go to Player" Background="#1DB954" Foreground="White" Padding="10" Margin="0,10" BorderThickness="0"
-                            HorizontalAlignment="Stretch" Click="GoToPlayer"/>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
 
-        </StackPanel>
+        <Button Grid.Row="0" Grid.Column="0" Content="Profile" Background="#1DB954" Foreground="White" Padding="10" Margin="10"
+                BorderThickness="0" Width="100" Height="50" Click="GoToProfile" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <Button Grid.Row="0" Grid.Column="1" Content="Search" Background="#1DB954" Foreground="White" Padding="10" Margin="10"
+                BorderThickness="0" Width="200" Height="50" Click="GoToSearch" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <Button Grid.Row="0" Grid.Column="2" Content="Playlists" Background="#1DB954" Foreground="White" Padding="10" Margin="10"
+                BorderThickness="0" Width="100" Height="50" Click="GoToPlaylist" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <Button Grid.Row="2" Grid.Column="0" Content="Chat" Background="#1DB954" Foreground="White" Padding="10" Margin="10"
+                BorderThickness="0" Width="100" Height="50" Click="GoToChat" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <Button Grid.Row="2" Grid.Column="2" Content="Player" Background="#1DB954" Foreground="White" Padding="10" Margin="10"
+                BorderThickness="0" Width="100" Height="50" Click="GoToPlayer" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <TextBlock x:Name="messageArea" Grid.Row="1" Grid.Column="1" Text="Welcome to MusicApp" Foreground="#9f61e2" FontSize="24"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="♫" Foreground="White" FontSize="48"
+                   HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.826,0.677" Margin="0,54,0,0" />
     </Grid>
 </Window>

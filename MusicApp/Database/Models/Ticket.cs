@@ -1,12 +1,12 @@
 ﻿namespace MusicApp.Database.Models
 {
-    public class Ticket
+    internal class Ticket
     {
-        public int TicketID { get; set; }
-        public int EventID { get; set; }
-        public int UserID { get; set; }
-        public DateTime PurchaseDate { get; set; }
-        public float TicketPrice { get; set; }
-        public string TicketType { get; set; }
+        internal int TicketID { get; set; }
+        internal int EventID { get; set; }
+        internal int UserID { get; set; }
+        internal DateTime PurchaseDate { get; set; }
+        internal float TicketPrice { get; set; }
+        internal string TicketType { get; set; }
     }
 }

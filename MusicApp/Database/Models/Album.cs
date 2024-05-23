@@ -1,12 +1,12 @@
 ﻿namespace MusicApp.Database.Models
 {
-    public class Album
+    internal class Album
     {
-        public int AlbumID { get; set; }
-        public int ArtistID { get; set; }
-        public string AlbumTitle { get; set; }
-        public DateTime AlbumReleaseDate { get; set; }
-        public string AlbumPicture { get; set; }
-        public string AlbumGenre { get; set; }
+        internal int AlbumID { get; set; }
+        internal int ArtistID { get; set; }
+        internal string AlbumTitle { get; set; }
+        internal DateTime AlbumReleaseDate { get; set; }
+        internal string AlbumPicture { get; set; }
+        internal string AlbumGenre { get; set; }
     }
 }
