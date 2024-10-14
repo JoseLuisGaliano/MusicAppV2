@@ -12,3 +12,7 @@ WPF desktop application with music listening/indexing functionalities, similar t
 - Built-in payment system
 - Data encryption module
 
+## Contributors
+
+- [Jose Luis Galiano Gómez](https://github.com/JoseLuisGaliano)
+- [Miguel Salinas Egea](https://github.com/MiguelSalinasE)
