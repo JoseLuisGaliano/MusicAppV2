@@ -18,4 +18,5 @@ WPF desktop application with music listening/indexing functionalities, similar t
 - [Miguel Salinas Egea](https://github.com/MiguelSalinasE)
 
 **Period of development**: March - May 2023
+
 Developed as part of the SOFTWARE ENGINEERING course at Universitatea Babeș-Bolyai
