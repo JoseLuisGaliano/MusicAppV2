@@ -6,7 +6,7 @@ WPF desktop application with music listening/indexing functionalities, similar t
 
 - Account system with authentication module
 - Customizable profiles
-- Public chat room hosted on remote server
+- Public chat room hosted on local server
 - Playlists (creation, edition, deletion)
 - Search engine (filters, sorters, fuzzy matching)
 - Built-in payment system
